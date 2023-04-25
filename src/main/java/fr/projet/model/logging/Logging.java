@@ -23,7 +23,7 @@ public class Logging {
 	
 	@ManyToOne
 	@JoinColumn(name = "log_user_id", nullable = false)
-	private Utilisateur user;
+	private Utilisateur utilisateur;
 
 	@Column(name = "log_infos", length = 255, nullable = false)
 	private String text;
@@ -40,11 +40,11 @@ public class Logging {
 	}
 
 	public Utilisateur getUser() {
-		return user;
+		return utilisateur;
 	}
 
 	public void setUser(Utilisateur user) {
-		this.user = user;
+		this.utilisateur = user;
 	}
 
 	public String getText() {
@@ -67,7 +67,7 @@ public class Logging {
 	public String toString() {
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH:mm");
 		return "Log #" + this.id + " - " + this.getDate().format(format) + " - " + this.text + " - " + "Utilisateur : "
-				+ this.user.getId();
+				+ this.utilisateur.getId();
 	}
 
 }

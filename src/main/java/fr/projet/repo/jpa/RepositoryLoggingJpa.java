@@ -12,17 +12,21 @@ public class RepositoryLoggingJpa extends AbstractRepositoryJpa implements ILogg
 
 	@Override
 	public List<Logging> findAll() {
-		try(EntityManager em = emf.createEntityManager();) {
+		try(EntityManager em = emf.createEntityManager()) {
 			return em
-				.createQuery("select l from Logging", Logging.class)
+				.createQuery("select l from Logging l", Logging.class)
 				.getResultList();
 		}
 	}
 
 	@Override
 	public Optional<Logging> findById(Integer id) {
-
-		return Optional.empty();
+		try (EntityManager em = emf.createEntityManager()) {
+			return Optional.ofNullable(em.find(Logging.class, id));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Optional.empty();
+		}
 	}
 
 	@Override
