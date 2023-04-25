@@ -4,3 +4,6 @@
 bin/
 target/
 src/main/resources/META-INF/
+.vscode/
+.env
+.envrc
