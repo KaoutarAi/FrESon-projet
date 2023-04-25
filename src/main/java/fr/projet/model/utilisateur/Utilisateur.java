@@ -38,6 +38,9 @@ public class Utilisateur {
 	@Column(name="user_password", length=100, nullable=false)
 	private String mdp;
 	
+	@Column(name= "user_role", insertable = false, updatable = false)
+	private String role;
+	
 //	@OneToMany (mappedBy = "")
 //	private List<Logging> loggings;
 
