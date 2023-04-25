@@ -39,11 +39,11 @@ public class Logging {
 		this.id = id;
 	}
 
-	public Utilisateur getUser() {
+	public Utilisateur getUtilisateur() {
 		return utilisateur;
 	}
 
-	public void setUser(Utilisateur user) {
+	public void setUtilisateur(Utilisateur user) {
 		this.utilisateur = user;
 	}
 

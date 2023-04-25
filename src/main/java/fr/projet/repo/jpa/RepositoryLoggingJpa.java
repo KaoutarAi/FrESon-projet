@@ -69,8 +69,10 @@ public class RepositoryLoggingJpa extends AbstractRepositoryJpa implements ILogg
 	@Override
 	public List<Logging> findByDate(int annee, int mois, int jour) {
 		try(EntityManager em = emf.createEntityManager()) {
+			//Construire une variable de type LocalDate à partir des années, mois & jour
+			// utiliser les fonctions YEAHR(), MONTH(), DAY() ou date_part()
 			return em
-				.createQuery("select l from Logging l where extract (year from log_date) = ?1 and extract (month from log_date) = ?2 and extract (day from log_date) = ?3", Logging.class)
+				.createQuery("select l from Logging l where year(l.date) = ?1 and month(l.date) = ?2 and day(l.date) = ?3", Logging.class)
 				.setParameter(1, annee)
 				.setParameter(2, mois)
 				.setParameter(3, jour)
