@@ -7,4 +7,3 @@ public class RepositoryFactory {
     public static IMusiqueRepository creaMusiqueRepository() {
         return new MusiqueRepositoryJpa();
     }
-}
