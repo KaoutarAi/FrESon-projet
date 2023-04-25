@@ -9,4 +9,4 @@ public interface IRepository<T, ID> {
 	public Optional<T> findById(ID id);
 	public T save(T entity);
 	public void deleteById(ID id);
-
+}
