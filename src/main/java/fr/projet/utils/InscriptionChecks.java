@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import fr.projet.model.utilisateur.Utilisateur;
 import fr.projet.repo.IUtilisateurRepository;
 
 @Service
