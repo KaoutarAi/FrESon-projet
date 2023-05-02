@@ -1,5 +1,5 @@
 package fr.projet.enums;
 
 public enum Tag {
-    JOIE, TRISTESSE, DEPRIME;
+    JOIE, TRISTESSE, DEPRIME, ENTHOUSIASME;
 }
