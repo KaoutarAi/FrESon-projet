@@ -5,6 +5,8 @@ import java.util.List;
 import fr.projet.enums.Tag;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,14 +35,15 @@ public class Playlist {
     private boolean isPublic;
 
     @Column(name = "playlist_tag")
+    @Enumerated(EnumType.STRING)
     @Getter @Setter
     private Tag etiquette;
 
     @ManyToMany
     @JoinTable(
         name = "playlists_contenu",
-        joinColumns = @JoinColumn(name = "music_id"),
-        inverseJoinColumns = @JoinColumn(name = "playlist_id")
+        joinColumns = @JoinColumn(name = "playlist_id"),
+        inverseJoinColumns = @JoinColumn(name = "music_id")
     )
     private List<Musique> musiques;
 
