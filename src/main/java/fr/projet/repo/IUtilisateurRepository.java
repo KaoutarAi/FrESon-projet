@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import fr.projet.model.utilisateur.Utilisateur;
 
 public interface IUtilisateurRepository extends JpaRepository<Utilisateur, Integer>{
-	public Optional<Utilisateur> findByPseudo(String pseudo);
-	public Optional<Utilisateur> findByPseudoRole(String pseudo, String role);
+//	public Optional<Utilisateur> findByPseudo(String pseudo);
+//	public Optional<Utilisateur> findByPseudoRole(String pseudo, String role);
 }
