@@ -44,6 +44,7 @@ public class Utilisateur {
 	@Column(name= "user_role", insertable = false, updatable = false)
 	private String role;
 	
+
 	@OneToMany(mappedBy = "utilisateur")
 	private List<Logging> loggings;
 
@@ -94,6 +95,11 @@ public class Utilisateur {
 	public void setMdp(String mdp) {
 		this.mdp = mdp;
 	}
+
+	public String getRole() {
+		return role;
+	}
+	
 	
 	
 	
