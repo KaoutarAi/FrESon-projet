@@ -53,6 +53,7 @@ public class Application {
 			}
 		}
 
+		//Utilisateur new_user = new Moderateur();
 		Utilisateur new_user = new Utilisateur();
 		new_user.setPseudo(pseudo);
 
