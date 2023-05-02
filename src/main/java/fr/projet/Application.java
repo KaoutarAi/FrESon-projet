@@ -6,12 +6,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import fr.projet.config.AppConfig;
+import fr.projet.model.utilisateur.Utilisateur;
 import fr.projet.repo.IMusiqueRepository;
+import fr.projet.repo.IPlaylistRepository;
 
 @Component
 public class Application {
         @Autowired
         private IMusiqueRepository repoMusic;
+
+        @Autowired
+        private IPlaylistRepository repoPlaylist;
 
 	public static void main(String[] args) {
          try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class)) {
@@ -34,6 +39,10 @@ public class Application {
         //                 }
         //             }
         //             );
-        repoMusic.findByAlbumContaining("Alb", PageRequest.of(0, 5)).forEach(m -> System.out.println(m.getTitre()));
+        // repoMusic.findByAlbumContaining("Alb", PageRequest.of(0, 5)).forEach(m -> System.out.println(m.getTitre()));
+        Utilisateur user = new Utilisateur();
+        user.setId(1);
+        repoPlaylist.findByUtilisateur(user, PageRequest.of(0, 5)).forEach(p -> System.out.println(p.getNom()));
+        // repoPlaylist.findAll().forEach(p -> System.out.println(p.getId() + " " + p.getUtilisateur().getPseudo()));
     }
 }

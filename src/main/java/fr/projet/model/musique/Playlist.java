@@ -3,6 +3,7 @@ package fr.projet.model.musique;
 import java.util.List;
 
 import fr.projet.enums.Tag;
+import fr.projet.model.utilisateur.Utilisateur;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,6 +49,8 @@ public class Playlist {
     )
     private List<Musique> musiques;
 
-
-    // Ajouter utilisateur
+    @ManyToOne
+    @JoinColumn(name = "playlist_user_id")
+    @Getter @Setter
+    Utilisateur utilisateur;
 }
