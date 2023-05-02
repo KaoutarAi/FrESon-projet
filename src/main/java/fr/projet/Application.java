@@ -2,6 +2,7 @@ package fr.projet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import fr.projet.config.AppConfig;
@@ -23,6 +24,16 @@ public class Application {
     }
 
     public void run() {
-        repoMusic.findAll().forEach(m -> System.out.println(m.getTitre()));;
+        // repoMusic.findByTitreContaining("Mus", PageRequest.of(0, 3)).forEach(m -> System.out.println(m.getTitre()));
+        // repoMusic.findAll()
+        //          .stream()
+        //          .forEach(
+        //             m -> {
+        //                 if (m.getAlbum() != null) {
+        //                     System.out.println(m.getAlbum().getNom());
+        //                 }
+        //             }
+        //             );
+        repoMusic.findByAlbumContaining("Alb", PageRequest.of(0, 5)).forEach(m -> System.out.println(m.getTitre()));
     }
 }
