@@ -5,7 +5,9 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+
 import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import jakarta.persistence.EntityManagerFactory;
 
 
+
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories("fr.projet.repo")
@@ -27,6 +30,7 @@ public class JpaConfig {
 	private String username;
 	@Value("${jpa.psql.password}")
 	private String password;
+
 	
 	@Bean
 	public DataSource dataSource() {
@@ -37,10 +41,11 @@ public class JpaConfig {
 		dataSource.setUsername(username);
 		dataSource.setPassword(password);
 		dataSource.setMaxTotal(10);
-		
+    
 		return dataSource;
 	}
 	
+
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
 		LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
@@ -52,12 +57,15 @@ public class JpaConfig {
 		
 		emf.setDataSource(dataSource);
 		emf.setJpaProperties(properties);
+
 		emf.setPackagesToScan("fr.projet.model");
+
 		emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 		
 		return emf;
 	}
 	
+
 	@Bean
 	public JpaTransactionManager transactionManager(EntityManagerFactory emf) {
 		return new JpaTransactionManager(emf);
