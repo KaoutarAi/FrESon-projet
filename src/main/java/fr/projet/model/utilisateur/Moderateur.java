@@ -6,5 +6,5 @@ import jakarta.persistence.Entity;
 @Entity
 @DiscriminatorValue("Modérateur")
 public class Moderateur extends Utilisateur{
-
+//
 }
