@@ -2,6 +2,7 @@ package fr.projet.repo.jpa;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import fr.projet.model.musique.Musique;
 import fr.projet.repo.IMusiqueRepository;
@@ -73,5 +74,11 @@ public class MusiqueRepositoryJpa extends AbstractRepositoryJpa implements IMusi
 			ex.printStackTrace();
 		}
     }
+
+	@Override
+	public Optional<Musique> findById(Integer id) {
+		// TODO Auto-generated method stub
+		return Optional.empty();
+	}
 
 }
