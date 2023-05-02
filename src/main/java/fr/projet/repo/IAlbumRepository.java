@@ -6,4 +6,5 @@ import fr.projet.model.musique.Album;
 
 public interface IAlbumRepository extends JpaRepository<Album, Integer>{
 
+
 }

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import fr.projet.model.musique.Musique;
 
+
 public interface IMusiqueRepository extends JpaRepository<Musique, Integer>{
     // when user search a music by title/artist/album, query a (short) list of candidate musics
     public List<Musique> findByTitreContaining(String partTitle, Pageable pageable);
