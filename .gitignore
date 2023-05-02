@@ -4,6 +4,8 @@
 bin/
 target/
 src/main/resources/META-INF/
+src/main/resources/jpa_postgres.properties
 .vscode/
 .env
 .envrc
+src/main/resources/jpa_postgres.properties
