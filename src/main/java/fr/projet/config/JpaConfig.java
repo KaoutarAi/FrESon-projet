@@ -25,8 +25,8 @@ public class JpaConfig {
 		
 		dataSource.setDriverClassName("org.postgresql.Driver");
 		dataSource.setUrl("jdbc:postgresql://localhost:5432/eshop");
-		dataSource.setUsername("postgres");
-		dataSource.setPassword("mdpSQLpierre63");
+		dataSource.setUsername(username);
+		dataSource.setPassword(password);
 		dataSource.setMaxTotal(10);
 		
 		return dataSource;
