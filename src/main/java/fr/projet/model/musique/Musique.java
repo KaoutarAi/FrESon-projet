@@ -17,6 +17,7 @@ import lombok.Setter;
 public class Musique {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "music_id")
     @Getter @Setter
     private int id;
 

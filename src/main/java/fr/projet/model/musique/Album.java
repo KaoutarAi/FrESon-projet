@@ -18,6 +18,7 @@ public class Album {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter @Setter
+    @Column(name = "album_id")
     private int id;
 
     @Column(name = "album_name")

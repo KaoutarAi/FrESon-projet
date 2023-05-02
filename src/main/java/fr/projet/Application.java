@@ -10,6 +10,7 @@ import fr.projet.repo.IUtilisateurRepository;
 public class Application {
 
 	public static void main(String[] args) {
+
 		int choixMenu = 0;
 
 		do {
