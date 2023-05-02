@@ -13,6 +13,7 @@ public class Application {
         @Autowired
         private IMusiqueRepository repoMusic;
 
+
 	public static void main(String[] args) {
          try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class)) {
             Application app = context.getBean(Application.class);
@@ -34,6 +35,6 @@ public class Application {
         //                 }
         //             }
         //             );
-        repoMusic.findByAlbumContaining("Alb", PageRequest.of(0, 5)).forEach(m -> System.out.println(m.getTitre()));
+        // repoMusic.findByAlbumContaining("Alb", PageRequest.of(0, 5)).forEach(m -> System.out.println(m.getTitre()));
     }
 }

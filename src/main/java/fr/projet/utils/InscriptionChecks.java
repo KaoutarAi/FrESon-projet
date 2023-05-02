@@ -3,7 +3,18 @@ package fr.projet.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import fr.projet.model.utilisateur.Utilisateur;
+import fr.projet.repo.IUtilisateurRepository;
+
+@Service
 public class InscriptionChecks {
+	
+	@Autowired
+	private IUtilisateurRepository repoUser;
+	
 	public boolean isValidPassword(String mdp) {
 		String regex = """
 				^(?=.*[0-9])
@@ -34,5 +45,11 @@ public class InscriptionChecks {
 		Matcher m = p.matcher(email);
 
 		return m.matches();
+	}
+	
+	public boolean isValidPseudo(String pseudo) {
+		if(pseudo == null || pseudo.length() < 5 || repoUser.findByPseudo(pseudo)) {
+			return false;
+		}
 	}
 }

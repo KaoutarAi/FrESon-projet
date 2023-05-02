@@ -1,5 +1,8 @@
 package fr.projet.model.utilisateur;
 
+import java.util.List;
+
+import fr.projet.model.logging.Logging;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorValue;
@@ -9,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -40,8 +44,9 @@ public class Utilisateur {
 	@Column(name= "user_role", insertable = false, updatable = false)
 	private String role;
 	
-//	@OneToMany (mappedBy = "")
-//	private List<Logging> loggings;
+
+	@OneToMany(mappedBy = "utilisateur")
+	private List<Logging> loggings;
 
 	public int getId() {
 		return id;
@@ -90,6 +95,11 @@ public class Utilisateur {
 	public void setMdp(String mdp) {
 		this.mdp = mdp;
 	}
+
+	public String getRole() {
+		return role;
+	}
+	
 	
 	
 	
