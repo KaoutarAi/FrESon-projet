@@ -50,6 +50,7 @@ public class InscriptionChecks {
 	public boolean isValidPseudo(String pseudo) {
 		if(pseudo == null || pseudo.length() < 5 || repoUser.findByPseudo(pseudo)) {
 			return false;
+			
 		}
 	}
 }

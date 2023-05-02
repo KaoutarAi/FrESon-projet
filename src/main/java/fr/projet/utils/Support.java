@@ -19,6 +19,7 @@ public class Support {
 		// et redirection à la page de connexion
 	}
 	
+	
 	public void changerMotDePasse(String newMdP) {
 		if (check.isValidPassword(newMdP)) {
 //			Utilisateur user = trouver l'utilisateur et réaffecter toutes ses infos

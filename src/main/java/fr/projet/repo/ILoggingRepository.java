@@ -18,4 +18,5 @@ public interface ILoggingRepository extends JpaRepository<Logging, Integer>{
 	
 	@Query("SELECT l FROM Logging l  WHERE l.utilisateur.pseudo = ?1 ")
 	public List<Logging> findByUser(String pseudo);
+	
 }
