@@ -6,4 +6,5 @@ import fr.projet.model.musique.Playlist;
 
 public interface IPlaylistRepository extends JpaRepository<Playlist, Integer> {
 
+
 }
