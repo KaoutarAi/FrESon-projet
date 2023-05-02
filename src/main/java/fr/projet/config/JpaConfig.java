@@ -7,13 +7,20 @@ import javax.sql.DataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import jakarta.persistence.EntityManagerFactory;
 
+
+@Configuration
+@EnableTransactionManagement
+@EnableJpaRepositories("fr.projet.repo")
 @PropertySource("classpath:/jpa_postgres.properties")
 public class JpaConfig {
 	@Value("${jpa.psql.username}")
@@ -26,7 +33,7 @@ public class JpaConfig {
 		BasicDataSource dataSource = new BasicDataSource();
 		
 		dataSource.setDriverClassName("org.postgresql.Driver");
-		dataSource.setUrl("jdbc:postgresql://localhost:5432/eshop");
+		dataSource.setUrl("jdbc:postgresql://localhost:5432/freson");
 		dataSource.setUsername(username);
 		dataSource.setPassword(password);
 		dataSource.setMaxTotal(10);
