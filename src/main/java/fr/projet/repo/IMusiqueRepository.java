@@ -22,7 +22,7 @@ public interface IMusiqueRepository extends JpaRepository<Musique, Integer>{
     // search a music by exact title/artist/album
     public Optional<Musique> findByTitre(String title);
 
-    public Optional<Musique> findByArstite(String artiste);
+    public Optional<Musique> findByArtiste(String artiste);
 
     @Query("SELECT msc FROM Musique msc WHERE msc.album.nom = ?1")
     public Optional<Musique> findByAlbum(String album);
