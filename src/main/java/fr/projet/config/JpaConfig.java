@@ -5,6 +5,9 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+
+import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -16,26 +19,33 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import jakarta.persistence.EntityManagerFactory;
 
-@Configuration 
-@EnableTransactionManagement 
+
+
+@Configuration
+@EnableTransactionManagement
 @EnableJpaRepositories("fr.projet.repo")
-@PropertySource("classpath:/jpa-postgres.properties")
+@PropertySource("classpath:/jpa_postgres.properties")
 public class JpaConfig {
+	@Value("${jpa.psql.username}")
+	private String username;
+	@Value("${jpa.psql.password}")
+	private String password;
+
 	
 	@Bean
 	public DataSource dataSource() {
 		BasicDataSource dataSource = new BasicDataSource();
 		
 		dataSource.setDriverClassName("org.postgresql.Driver");
-		dataSource.setUrl("jdbc:postgresql://localhost:5432/eshop");
-		dataSource.setUsername("postgres");
-		dataSource.setPassword("root");
-		dataSource.setMaxTotal(10); 
-		
+		dataSource.setUrl("jdbc:postgresql://localhost:5432/freson");
+		dataSource.setUsername(username);
+		dataSource.setPassword(password);
+		dataSource.setMaxTotal(10);
+    
 		return dataSource;
 	}
 	
-	
+
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
 		LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
@@ -47,13 +57,15 @@ public class JpaConfig {
 		
 		emf.setDataSource(dataSource);
 		emf.setJpaProperties(properties);
-		emf.setPackagesToScan("fr.formation.model");
+
+		emf.setPackagesToScan("fr.projet.model");
+
 		emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 		
 		return emf;
 	}
 	
-	
+
 	@Bean
 	public JpaTransactionManager transactionManager(EntityManagerFactory emf) {
 		return new JpaTransactionManager(emf);
