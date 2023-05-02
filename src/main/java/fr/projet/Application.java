@@ -40,21 +40,21 @@ public class Application {
 		
 		repoUtilisateur.findAllByRole("Utilisateur").forEach(u->System.out.println(u.getEmail()));
 		
-//		Utilisateur user = new Utilisateur();
-//		user.setNom("nom");
-//		user.setPrenom("user");
-//		user.setEmail("nom.user@gmail.com");
-//		user.setPseudo("nomU");
-//		user.setMdp("dkjdfk");
-//		repoUtilisateur.save(user);
+		Utilisateur user = new Utilisateur();
+		user.setNom("nom");
+		user.setPrenom("user");
+		user.setEmail("nom.user@gmail.com");
+		user.setPseudo("nomU");
+		user.setMdp("dkjdfk");
+		repoUtilisateur.save(user);
 		
-//		Utilisateur userc = new Createur();
-//		userc.setNom("nom");
-//		userc.setPrenom("prenom");
-//		userc.setEmail("nom.prenom@gmail.com");
-//		userc.setPseudo("nomC");
-//		userc.setMdp("tutkujhj");
-//		repoUtilisateur.save(userc);
+		Utilisateur userc = new Createur();
+		userc.setNom("nom");
+		userc.setPrenom("prenom");
+		userc.setEmail("nom.prenom@gmail.com");
+		userc.setPseudo("nomC");
+		userc.setMdp("tutkujhj");
+		repoUtilisateur.save(userc);
 		
 		repoUtilisateur.deleteById(8);
 		repoUtilisateur.deleteByPseudo("nomC");
