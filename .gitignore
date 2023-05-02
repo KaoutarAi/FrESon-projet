@@ -7,3 +7,4 @@ src/main/resources/META-INF/
 .vscode/
 .env
 .envrc
+src/main/resources/jpa_postgres.properties
