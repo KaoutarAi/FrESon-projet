@@ -12,6 +12,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 import jakarta.persistence.EntityManagerFactory;
 
+@PropertySource("classpath:/jpa_postgres.properties")
 public class JpaConfig {
 	@Value("${jpa.psql.username}")
 	private String username;
