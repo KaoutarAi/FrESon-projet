@@ -44,7 +44,7 @@ public class MusiqueRepositoryJpa extends AbstractRepositoryJpa implements IMusi
     public List<Musique> findAll() {
 		try (EntityManager em = emf.createEntityManager()) {
 			return em
-				.createQuery("select c from Client c", Musique.class)
+				.createQuery("select m from Musique m", Musique.class)
 				.getResultList();
 		}
 		catch (Exception ex) {

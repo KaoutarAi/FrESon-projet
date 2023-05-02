@@ -8,6 +8,9 @@ import fr.projet.repo.jpa.RepositoryLoggingJpa;
 import fr.projet.repo.jpa.UtilisateurRepositoryJpa;
 
 public class RepositoryFactory {
+    public static IMusiqueRepository creaMusiqueRepository() {
+        return new MusiqueRepositoryJpa();
+    }
 	public static ILoggingRepository createLoggingRepository() {
 		return new RepositoryLoggingJpa();
   }
@@ -19,4 +22,3 @@ public class RepositoryFactory {
 		return new UtilisateurRepositoryJpa();
 	}
 }
-

@@ -15,6 +15,7 @@ public class Link {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter @Setter
+    @Column(name = "link_id")
     private int id;
 
     @Column(name = "link_api", length = 500)
