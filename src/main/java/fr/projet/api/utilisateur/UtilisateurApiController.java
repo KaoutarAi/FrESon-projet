@@ -26,8 +26,6 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/utilisateur")
 public class UtilisateurApiController {
-	// DTO : Data Transform Object
-	// Le principe, c'est de créer une instance spécialement dédiée pour le transfert d'inprojet
 	
 	@Autowired
 	private IUtilisateurRepository repoUtilisateur;
