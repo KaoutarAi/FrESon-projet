@@ -4,11 +4,6 @@ import java.time.LocalDateTime;
 
 import org.springframework.beans.BeanUtils;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import fr.projet.model.logging.Logging;
 import fr.projet.model.utilisateur.Utilisateur;
 
