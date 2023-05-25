@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.projet.api.musique.request.MusiqueRequest;
 import fr.projet.api.musique.response.MusiqueResponse;
-import fr.projet.api.request.MusiqueRequest;
 import fr.projet.exception.musique.MusiqueNotFoundException;
 import fr.projet.exception.musique.MusiqueNotValidException;
 import fr.projet.model.musique.Musique;
@@ -66,7 +66,7 @@ public class MusiqueApiController {
             this.repoMusic.deleteById(id);
         }
         catch (Exception ex) {
-            throw new MusiqueNotValidException();
+            throw new MusiqueNotFoundException();
         }
     }
 

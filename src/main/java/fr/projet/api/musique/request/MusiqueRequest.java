@@ -1,4 +1,4 @@
-package fr.projet.api.request;
+package fr.projet.api.musique.request;
 
 import org.springframework.beans.BeanUtils;
 
