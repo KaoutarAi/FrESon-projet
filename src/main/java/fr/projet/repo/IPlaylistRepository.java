@@ -13,6 +13,12 @@ import fr.projet.model.utilisateur.Utilisateur;
 
 public interface IPlaylistRepository extends JpaRepository<Playlist, Integer> {
 
+    @Query("SELECT p FROM Playlist p LEFT JOIN FETCH p.musiques m ")
+    public List<Playlist> findAllFetchMusiques();
+
+    @Query("SELECT p FROM Playlist p LEFT JOIN FETCH p.musiques m WHERE p.id = ?1")
+    public Optional<Playlist> findByIdFetchMusiques(int id);
+
     // when user search a playlist by title/user, query a (short) list of candidate playlists
     public List<Playlist> findByNomContaining(String partNom, Pageable pageable);
 
