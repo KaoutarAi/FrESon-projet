@@ -76,12 +76,12 @@
 			<version>${lombok.version}</version>
 		</dependency>
 
-        <!-- SPRING-MVC -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
+		<!-- SPRING-MVC -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
 
 		<!-- JSP / JSTL -->
 		<dependency>
@@ -103,15 +103,21 @@
 			<version>${validator.version}</version>
 		</dependency>
 
-		<!--Jackson DataBind-->
+		<!--Jackson DataBind et DataType-->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<version>${jackson.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
 	</dependencies>
 
-    <build>
-        <finalName>frEson</finalName>
-    </build>
+	<build>
+		<finalName>frEson</finalName>
+	</build>
 </project>
