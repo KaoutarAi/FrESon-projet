@@ -1,4 +1,4 @@
-package fr.projet.utilisateur.api;
+package fr.projet.api.utilisateur;
 
 import java.util.List;
 
