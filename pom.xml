@@ -27,6 +27,7 @@
 	<dependencies>
 		
 		<!-- SPRING CONTEXT -->
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -47,7 +48,6 @@
 			<artifactId>spring-data-jpa</artifactId>
 			<version>${data-jpa.version}</version>
 		</dependency>
-
 
 		<!-- Gestionnaire Pool de Connexion Commons-DBCP2 -->
 		<dependency>
@@ -103,6 +103,7 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>${validator.version}</version>
 		</dependency>
+
 
 		<!--Jackson DataBind et DataType-->
 		<dependency>
