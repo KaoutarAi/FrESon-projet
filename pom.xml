@@ -112,6 +112,6 @@
 	</dependencies>
 
     <build>
-        <finalName>frEson</finalName>
+        <finalName>FrESon</finalName>
     </build>
 </project>
