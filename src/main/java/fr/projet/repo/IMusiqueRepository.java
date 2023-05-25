@@ -27,6 +27,9 @@ public interface IMusiqueRepository extends JpaRepository<Musique, Integer>{
     @Query("SELECT msc FROM Musique msc WHERE msc.album.nom = ?1")
     public Optional<Musique> findByAlbum(String album);
 
+    @Query("SELECT msc FROM Musique msc WHERE msc.album.id = ?1")
+    public List<Musique> findByAlbumId(int id);
+
     // used for recommendation (most streamed)
     public List<Musique> findAllByOrderByNbPlaysDesc(Pageable pageable);
 
