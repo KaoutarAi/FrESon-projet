@@ -117,8 +117,9 @@
 			<version>${jackson.version}</version>
 		</dependency>
 	</dependencies>
-
+  
 	<build>
 		<finalName>FrESon</finalName>
 	</build>
+  
 </project>

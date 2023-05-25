@@ -9,6 +9,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,10 +25,12 @@ public class Musique {
     private int id;
 
     @Column(name = "music_title", length = 100, nullable = false)
+    @NotBlank
     @Getter @Setter
     private String titre;
 
     @Column(name = "music_artist", length = 100, nullable = false)
+    @NotBlank
     @Getter @Setter
     private String artiste;
 
@@ -35,6 +39,7 @@ public class Musique {
     private String genre;
 
     @Column(name = "music_duration")
+    @Positive
     @Getter @Setter
     private int duree;
 
