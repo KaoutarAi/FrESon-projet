@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.beans.BeanUtils;
 
+import fr.projet.api.utilisateur.response.UtilisateurResponse;
 import fr.projet.model.logging.Logging;
 import fr.projet.model.utilisateur.Utilisateur;
 
@@ -19,8 +20,9 @@ public class LoggingResponse {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public Utilisateur getUtilisateur() {
-		return utilisateur;
+	
+	public UtilisateurResponse getUtilisateur() {
+		return UtilisateurResponse.convert(utilisateur);
 	}
 	public void setUtilisateur(Utilisateur utilisateur) {
 		this.utilisateur = utilisateur;

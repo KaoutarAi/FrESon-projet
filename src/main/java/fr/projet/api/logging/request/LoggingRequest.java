@@ -1,12 +1,12 @@
 package fr.projet.api.logging.request;
 
-import fr.projet.model.utilisateur.Utilisateur;
+import fr.projet.api.utilisateur.response.UtilisateurResponse;
 import jakarta.validation.constraints.NotBlank;
 
 public class LoggingRequest {
 	@NotBlank
 	private String text;
-	private Utilisateur utilisateur;
+	private UtilisateurResponse utilisateurResponse;
 
 	public String getText() {
 		return text;
@@ -16,12 +16,12 @@ public class LoggingRequest {
 		this.text = text;
 	}
 
-	public Utilisateur getUtilisateur() {
-		return utilisateur;
+	public UtilisateurResponse getUtilisateurResponse() {
+		return utilisateurResponse;
 	}
 
-	public void setUtilisateur(Utilisateur utilisateur) {
-		this.utilisateur = utilisateur;
+	public void setUtilisateurResponse(UtilisateurResponse utilisateurResponse) {
+		this.utilisateurResponse = utilisateurResponse;
 	}
 
 }
