@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,6 +58,16 @@ public class MusiqueApiController {
         Musique music = request.toMusique();
         music.setId(id);
         return MusiqueResponse.convert(this.repoMusic.save(music));
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable int id) {
+        try {
+            this.repoMusic.deleteById(id);
+        }
+        catch (Exception ex) {
+            throw new MusiqueNotValidException();
+        }
     }
 
 }
