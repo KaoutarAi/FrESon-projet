@@ -16,6 +16,8 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,10 +31,12 @@ public class Playlist {
     private int id;
 
     @Column(name = "playlist_name")
+    @NotBlank
     @Getter @Setter
     private String nom;
 
     @Column(name = "playlist_is_public")
+    @NotNull
     @Getter @Setter
     private boolean isPublic;
 
@@ -47,6 +51,7 @@ public class Playlist {
         joinColumns = @JoinColumn(name = "playlist_id"),
         inverseJoinColumns = @JoinColumn(name = "music_id")
     )
+    @Getter @Setter
     private List<Musique> musiques;
 
     @ManyToOne
