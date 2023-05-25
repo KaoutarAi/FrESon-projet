@@ -23,7 +23,12 @@ public class MusiqueResponse {
         MusiqueResponse response = new MusiqueResponse();
         BeanUtils.copyProperties(music, response);
         return response;
+    }
 
+    public Musique toMusic() {
+        Musique music = new Musique();
+        BeanUtils.copyProperties(this, music);
+        return music;
     }
 
 }
