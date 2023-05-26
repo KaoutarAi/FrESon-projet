@@ -20,48 +20,48 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="utilisateur")
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@Table(name = "utilisateur")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "user_role")
 @DiscriminatorValue("Utilisateur")
 public class Utilisateur {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="user_id")
+	@Column(name = "user_id")
 	private int id;
-	
-	@Column(name="user_surname", length=100, nullable=false)
+
+	@Column(name = "user_surname", length = 100, nullable = false)
 	private String nom;
-	
-	@Column(name="user_name", length=100, nullable=false)
+
+	@Column(name = "user_name", length = 100, nullable = false)
 	private String prenom;
-	
-	@Column(name="user_pseudo", length=100, unique=true, nullable=false)
+
+	@Column(name = "user_pseudo", length = 100, unique = true, nullable = false)
 	private String pseudo;
-	
-	@Column(name="user_email", length=100, nullable=false)
+
+	@Column(name = "user_email", length = 100, nullable = false)
 	private String email;
-	
-	@Column(name="user_password", length=100, nullable=false)
+
+	@Column(name = "user_password", length = 100, nullable = false)
 	private String mdp;
-	
-	@Column(name= "user_role", insertable = false, updatable = false)
+
+	@Column(name = "user_role", insertable = false, updatable = false)
 	private String role;
-	
+
 	@OneToMany(mappedBy = "utilisateur")
 	private List<Logging> loggings;
-	
-	@OneToMany (mappedBy = "utilisateur")
+
+	@OneToMany(mappedBy = "utilisateur")
 	private List<Commentaire> commentaires;
-	
+
 	@ManyToMany
-    @JoinTable(
-        name = "abonnement",
-        joinColumns = @JoinColumn(name = "abo_user_id"),
-        inverseJoinColumns = @JoinColumn(name = "abo_playlist_id")
-    )
-	
-    private List<Playlist> playlists;
+	@JoinTable(
+			name = "abonnement", 
+			joinColumns = @JoinColumn(name = "abo_user_id"), 
+			inverseJoinColumns = @JoinColumn(name = "abo_playlist_id")
+			)
+
+	private List<Playlist> playlists;
 
 	public int getId() {
 		return id;
@@ -114,7 +114,7 @@ public class Utilisateur {
 	public String getRole() {
 		return role;
 	}
-	
+
 	public void setRole(String role) {
 		this.role = role;
 	}
@@ -142,7 +142,5 @@ public class Utilisateur {
 	public void setCommentaires(List<Commentaire> commentaires) {
 		this.commentaires = commentaires;
 	}
-	
-	
-	
+
 }
