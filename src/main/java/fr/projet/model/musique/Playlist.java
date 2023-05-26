@@ -66,6 +66,7 @@ public class Playlist {
     private Utilisateur utilisateur;
 
     @OneToMany(mappedBy = "playlist")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @Getter @Setter
     private List<Commentaire> commentaire;
 }
