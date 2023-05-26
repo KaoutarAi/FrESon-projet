@@ -3,6 +3,7 @@ package fr.projet.model.utilisateur;
 import java.util.List;
 
 import fr.projet.model.logging.Logging;
+import fr.projet.model.musique.Playlist;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorValue;
@@ -12,6 +13,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -46,6 +50,18 @@ public class Utilisateur {
 	
 	@OneToMany(mappedBy = "utilisateur")
 	private List<Logging> loggings;
+	
+	@OneToMany (mappedBy = "utilisateur")
+	private List<Commentaire> commentaires;
+	
+	@ManyToMany
+    @JoinTable(
+        name = "abonnement",
+        joinColumns = @JoinColumn(name = "abo_user_id"),
+        inverseJoinColumns = @JoinColumn(name = "abo_playlist_id")
+    )
+	
+    private List<Playlist> playlists;
 
 	public int getId() {
 		return id;
@@ -93,6 +109,38 @@ public class Utilisateur {
 
 	public void setMdp(String mdp) {
 		this.mdp = mdp;
+	}
+
+	public String getRole() {
+		return role;
+	}
+	
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public List<Logging> getLoggings() {
+		return loggings;
+	}
+
+	public void setLoggings(List<Logging> loggings) {
+		this.loggings = loggings;
+	}
+
+	public List<Playlist> getPlaylists() {
+		return playlists;
+	}
+
+	public void setPlaylists(List<Playlist> playlists) {
+		this.playlists = playlists;
+	}
+
+	public List<Commentaire> getCommentaires() {
+		return commentaires;
+	}
+
+	public void setCommentaires(List<Commentaire> commentaires) {
+		this.commentaires = commentaires;
 	}
 	
 	
