@@ -44,8 +44,8 @@ public class Logging {
 		return utilisateur;
 	}
 
-	public void setUtilisateur(Utilisateur user) {
-		this.utilisateur = user;
+	public void setUtilisateur(Utilisateur utilisateur) {
+		this.utilisateur = utilisateur;
 	}
 
 	public String getText() {
