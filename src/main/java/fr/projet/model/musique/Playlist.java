@@ -68,4 +68,5 @@ public class Playlist {
     @OneToMany(mappedBy = "playlist")
     @Getter @Setter
     private List<Commentaire> commentaire;
+
 }
