@@ -39,6 +39,14 @@ public class LoggingApiController {
 				.toList();
 	}
 	
+	@GetMapping("/utilisateur/{id}")
+	public List<LoggingResponse> findByUser(@PathVariable int id){
+		return this.repoLogging.findByUtilisateurId(id)
+				.stream()
+				.map(LoggingResponse::convert)
+				.toList();
+	}
+	
 	@GetMapping("/{year}-{month}-{day}")
 	public List<LoggingResponse> findByDay(@PathVariable int year,@PathVariable int month,@PathVariable int day ){
 		return this.repoLogging.findByDate(year, month, day)
@@ -107,12 +115,23 @@ public class LoggingApiController {
 		this.repoLogging.deleteById(id);
 	}
 	
+	@DeleteMapping("/utilisateur/{id}")
+	public void deleteByUtilisateurId(@PathVariable int id) {
+		List<Logging> toDelete = this.repoLogging.findByUtilisateurId(id);
+		if (toDelete.isEmpty()) {
+			throw new LogNotFoundException();
+		}
+		for(Logging l : toDelete) {
+			this.repoLogging.delete(l);
+		}
+	}
+	
 	@DeleteMapping("/{year}/{month}/{day}")
 	public void deleteByDay(@PathVariable int year, @PathVariable int month, @PathVariable int day){
 		List<Logging> toDelete = this.repoLogging.findByDate(year, month, day);
 		for (Logging l : toDelete) {
 			System.out.println("Suppression du Log "+l.getId());
-			this.repoLogging.deleteById(l.getId());
+			this.repoLogging.delete(l);
 		}
 	}
 	

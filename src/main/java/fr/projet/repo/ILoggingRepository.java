@@ -25,4 +25,6 @@ public interface ILoggingRepository extends JpaRepository<Logging, Integer>{
 	@Query("SELECT l FROM Logging l WHERE EXTRACT (year FROM l.date) = ?1")
 	public List<Logging> findByYear(int annee);
 	
+	@Query("SELECT l FROM Logging l WHERE l.utilisateur.id = ?1")
+	public List<Logging> findByUtilisateurId(int id);
 }
