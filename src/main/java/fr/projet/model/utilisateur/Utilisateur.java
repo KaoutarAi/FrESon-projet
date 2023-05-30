@@ -2,6 +2,9 @@ package fr.projet.model.utilisateur;
 
 import java.util.List;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import fr.projet.model.logging.Logging;
 import fr.projet.model.musique.Playlist;
 import jakarta.persistence.Column;
@@ -56,11 +59,11 @@ public class Utilisateur {
 
 	@ManyToMany
 	@JoinTable(
-			name = "abonnement", 
-			joinColumns = @JoinColumn(name = "abo_user_id"), 
+			name = "abonnements",
+			joinColumns = @JoinColumn(name = "abo_user_id"),
 			inverseJoinColumns = @JoinColumn(name = "abo_playlist_id")
 			)
-
+    @OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Playlist> playlists;
 
 	public int getId() {
