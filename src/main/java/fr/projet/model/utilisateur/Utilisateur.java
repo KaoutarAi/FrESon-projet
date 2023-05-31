@@ -5,12 +5,15 @@ import java.util.List;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import fr.projet.enums.Role;
 import fr.projet.model.logging.Logging;
 import fr.projet.model.musique.Playlist;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,7 +29,7 @@ import jakarta.persistence.Table;
 @Table(name = "utilisateur")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "user_role")
-@DiscriminatorValue("Utilisateur")
+@DiscriminatorValue("UTILISATEUR")
 public class Utilisateur {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -122,6 +125,7 @@ public class Utilisateur {
 	public void setMdp(String mdp) {
 		this.mdp = mdp;
 	}
+	
 
 	public String getRole() {
 		return role;

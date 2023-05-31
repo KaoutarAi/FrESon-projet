@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +30,9 @@ public class UtilisateurApiController {
 	
 	@Autowired
 	private IUtilisateurRepository repoUtilisateur;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@GetMapping
 	public List<UtilisateurResponse> findAll() {
@@ -67,22 +71,22 @@ public class UtilisateurApiController {
 //		return UtilisateurResponse.convert(utilisateur);
 //	}
 	
-	@PostMapping
+	@PostMapping("/inscription")
 	public UtilisateurResponse inscription(@Valid @RequestBody InscriptionRequest inscriptionRequest, BindingResult result) {
 		if (result.hasErrors()) {
 			throw new InscriptionNotValidException();
 		}
-		
 		if (inscriptionRequest.getMdp().equals(inscriptionRequest.getMdpVerif()) == false) {
-			throw new InscriptionNotValidException();
-		}
-		
+            throw new InscriptionNotValidException();
+        }
 		Utilisateur utilisateur = new Utilisateur();
 		
 		BeanUtils.copyProperties(inscriptionRequest, utilisateur);
 		
-		this.repoUtilisateur.save(utilisateur);
+		utilisateur.setMdp(this.passwordEncoder.encode(inscriptionRequest.getMdp()));
 		
+		this.repoUtilisateur.save(utilisateur);
+
 		return UtilisateurResponse.convert(utilisateur);
 	}
 	

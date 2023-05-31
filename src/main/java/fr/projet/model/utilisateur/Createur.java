@@ -4,7 +4,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("Créateur ")
+@DiscriminatorValue("CREATEUR ")
 public class Createur extends Utilisateur{
 //
 }
