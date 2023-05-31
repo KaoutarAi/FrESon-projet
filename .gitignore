@@ -8,3 +8,4 @@ src/main/resources/jpa_postgres.properties
 .vscode/
 .env
 .envrc
+src/main/resources/application-dev.properties
