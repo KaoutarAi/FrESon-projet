@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.service.annotation.PatchExchange;
 
 import fr.projet.api.logging.request.LoggingRequest;
 import fr.projet.api.logging.response.LoggingResponse;
@@ -42,6 +43,14 @@ public class LoggingApiController {
 	@GetMapping("/utilisateur/{id}")
 	public List<LoggingResponse> findByUser(@PathVariable int id){
 		return this.repoLogging.findByUtilisateurId(id)
+				.stream()
+				.map(LoggingResponse::convert)
+				.toList();
+	}
+	
+	@GetMapping("/infos/{text}")
+	public List<LoggingResponse> findByInfos(@PathVariable String text){
+		return this.repoLogging.findByInfo(text)
 				.stream()
 				.map(LoggingResponse::convert)
 				.toList();
