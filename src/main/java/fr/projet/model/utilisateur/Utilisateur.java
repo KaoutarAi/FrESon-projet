@@ -61,19 +61,19 @@ public class Utilisateur {
 
 	@ManyToMany
 	@JoinTable(
-			name = "abonnement", 
-			joinColumns = @JoinColumn(name = "abo_user_id"), 
+			name = "abonnements",
+			joinColumns = @JoinColumn(name = "abo_user_id"),
 			inverseJoinColumns = @JoinColumn(name = "abo_playlist_id")
 			)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Playlist> abonnements;
-	
-	
+
+
 	@OneToMany (mappedBy = "utilisateur")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Playlist> playlists;
-	
-	
+
+
 
 	public int getId() {
 		return id;
@@ -162,6 +162,6 @@ public class Utilisateur {
 	public void setAbonnements(List<Playlist> abonnements) {
 		this.abonnements = abonnements;
 	}
-	
+
 
 }

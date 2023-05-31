@@ -32,6 +32,36 @@ public interface IPlaylistRepository extends JpaRepository<Playlist, Integer> {
 
     public List<Playlist> findByUtilisateur(Utilisateur user, Pageable pageable);
 
+    // @Query(
+    //     value = "SELECT * FROM playlists\n" + //
+    //                     "JOIN\n" + //
+    //                     "    (SELECT abo_playlist_id, COUNT(*) as nbAbo\n" + //
+    //                     "        FROM abonnements\n" + //
+    //                     "        GROUP BY abo_playlist_id\n" + //
+    //                     "        ORDER BY nbAbo DESC) AS abonnes\n" + //
+    //                     "ON playlist_id = abo_playlist_id;",
+    //     nativeQuery = true)
+    @Query("select p from Playlist p order by size(p.abonnes) desc")
+    public List<Playlist> findAllByOrderNbAbo();
+
+    @Query("select p from Playlist p order by size(p.abonnes) desc")
+    public List<Playlist> findTopByNbAbo(Pageable pageable);
+
+    // @Query(value = "SELECT\n" + //
+    //                 "    l.*,\n" + //
+    //                 "    p.*\n" + //
+    //                 "FROM\n" + //
+    //                 "    playlists p\n" + //
+    //                 "INNER JOIN\n" + //
+    //                 "    loggings l\n" + //
+    //                 "    ON l.log_infos LIKE 'creation Playlist - id=' || CAST(p.playlist_id AS VARCHAR(255)) || ' %'\n" + //
+    //                 "ORDER BY l.log_date DESC",
+    //             nativeQuery = true)
+    @Query("select p from Playlist p, Logging l WHERE  l.text LIKE CONCAT('creation Playlist - id=', CAST(p.id AS string), ' %') ORDER BY l.date DESC")
+    public List<Playlist> findAllByCreationDateDesc();
+
+    @Query("select p from Playlist p, Logging l WHERE  l.text LIKE CONCAT('creation Playlist - id=', CAST(p.id AS string), ' %') ORDER BY l.date DESC")
+    public List<Playlist> findTopByCreationDate(Pageable pageable);
 
 
 }

@@ -1,5 +1,8 @@
 package fr.projet.model.musique;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -53,6 +56,7 @@ public class Musique {
 
     @OneToOne
     @JoinColumn(name = "music_link")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @Getter @Setter
     private Link adresse;
 
