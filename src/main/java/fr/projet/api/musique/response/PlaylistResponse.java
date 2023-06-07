@@ -28,7 +28,7 @@ public class PlaylistResponse {
         if (playlist.getMusiques() != null) {
             response.musiques = playlist.getMusiques()
                                         .stream()
-                                        .map(MusiqueResponse::convert)
+                                        .map(MusiqueResponse::new)
                                         .toList();
         }
 

@@ -23,6 +23,14 @@ public class Link {
     @Getter @Setter
     private String adresseApi;
 
+    @Column(name = "link_api_download", length = 500)
+    @Getter @Setter
+    private String adresseApiDwnload;
+
+    @Column(name = "link_image", length = 500)
+    @Getter @Setter
+    private String adresseImage;
+
     @Column(name = "link_local", length = 500)
     @Getter @Setter
     private String adresseLocale;

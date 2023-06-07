@@ -27,7 +27,7 @@ public class AlbumResponse {
         BeanUtils.copyProperties(album, response);
         if (album.getMusiques() != null) {
             response.musiques = album.getMusiques().stream()
-            .map(MusiqueResponse::convert).toList();
+            .map(MusiqueResponse::new).toList();
         }
         return response;
     }
