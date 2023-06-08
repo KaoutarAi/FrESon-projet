@@ -11,20 +11,16 @@ import fr.projet.model.utilisateur.Utilisateur;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter @Setter
 public class PlaylistRequest {
-    @Getter @Setter
     private String nom;
 
-    @Getter @Setter
     private boolean isPublic;
 
-    @Getter @Setter
     private Tag etiquette;
 
-    @Getter @Setter
     private List<MusiqueResponse> musiques;
 
-    @Getter @Setter
     private Utilisateur utilisateur;
 
     public Playlist toPlaylist() {

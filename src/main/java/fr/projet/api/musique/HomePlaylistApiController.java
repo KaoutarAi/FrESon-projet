@@ -21,7 +21,7 @@ public class HomePlaylistApiController {
     public List<PlaylistResponse> findAllByViews() {
         return this.repoPlaylist.findAllByOrderNbAbo()
                                 .stream()
-                                .map(PlaylistResponse::convert)
+                                .map(PlaylistResponse::new)
                                 .toList();
     }
 

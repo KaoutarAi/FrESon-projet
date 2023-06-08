@@ -28,26 +28,23 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "playlists")
+@Getter @Setter
 public class Playlist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "playlist_id")
-    @Getter @Setter
     private int id;
 
     @Column(name = "playlist_name")
     @NotBlank
-    @Getter @Setter
     private String nom;
 
     @Column(name = "playlist_is_public")
     @NotNull
-    @Getter @Setter
     private boolean isPublic;
 
     @Column(name = "playlist_tag")
     @Enumerated(EnumType.STRING)
-    @Getter @Setter
     private Tag etiquette;
 
     @ManyToMany
@@ -57,17 +54,14 @@ public class Playlist {
         inverseJoinColumns = @JoinColumn(name = "music_id")
     )
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @Getter @Setter
     private List<Musique> musiques;
 
     @ManyToOne
     @JoinColumn(name = "playlist_user_id")
-    @Getter @Setter
     private Utilisateur utilisateur;
 
     @OneToMany(mappedBy = "playlist")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @Getter @Setter
     private List<Commentaire> commentaire;
 
 

@@ -3,6 +3,7 @@ package fr.projet.api.musique;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.projet.api.musique.request.PlaylistRequest;
 import fr.projet.api.musique.response.PlaylistResponse;
+import fr.projet.enums.Tag;
 import fr.projet.exception.PlaylistNotFoundException;
 import fr.projet.exception.PlaylistNotValidException;
 import fr.projet.model.musique.Playlist;
@@ -34,14 +37,50 @@ public class PlaylistApiController {
     public List<PlaylistResponse> findAll() {
         return this.repoPlaylist.findAllFetchMusiques()
                                 .stream()
-                                .map(PlaylistResponse::convert)
+                                .map(PlaylistResponse::new)
                                 .toList();
     }
+
+    // Display all public playlists
+    @GetMapping("/public")
+    @Transactional
+    public List<PlaylistResponse> findAllPublic() {
+        return this.repoPlaylist.findAllPublicFetchMusiques()
+                                .stream()
+                                .map(PlaylistResponse::new)
+                                .toList();
+    }
+
+
 
     // Display the infos of a specific playlist (fetched by its id)
     @GetMapping("/{id}")
     public PlaylistResponse findById(@PathVariable int id) {
-        return PlaylistResponse.convert(this.repoPlaylist.findByIdFetchMusiques(id).orElseThrow(PlaylistNotFoundException::new));
+        return new PlaylistResponse(this.repoPlaylist.findByIdFetchMusiques(id).orElseThrow(PlaylistNotFoundException::new));
+    }
+
+    @GetMapping("/par-nom")
+    public List<PlaylistResponse> findByNomContaining(@RequestParam String substring, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int limit) {
+        return this.repoPlaylist.findByNomContaining(substring, PageRequest.of(page, limit))
+                                .stream()
+                                .map(PlaylistResponse::new)
+                                .toList();
+    }
+
+    @GetMapping("/par-utilisateur")
+    public List<PlaylistResponse> findByUtilisateurContaining(@RequestParam String substring, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int limit) {
+        return this.repoPlaylist.findByUtilisateurContaining(substring, PageRequest.of(page, limit))
+                                .stream()
+                                .map(PlaylistResponse::new)
+                                .toList();
+    }
+
+    @GetMapping("/par-etiquette")
+    public List<PlaylistResponse> findByTagContaining(@RequestParam Tag tag, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int limit) {
+        return this.repoPlaylist.findByEtiquette(tag, PageRequest.of(page, limit))
+                                .stream()
+                                .map(PlaylistResponse::new)
+                                .toList();
     }
 
     // Display all playlists ordered by number of subscribers
@@ -50,7 +89,34 @@ public class PlaylistApiController {
     public List<PlaylistResponse> findAllByViews() {
         return this.repoPlaylist.findAllByOrderNbAbo()
                                 .stream()
-                                .map(PlaylistResponse::convert)
+                                .map(PlaylistResponse::new)
+                                .toList();
+    }
+
+    @GetMapping("/plus-vues/top")
+    @Transactional
+    public List<PlaylistResponse> findTopByViews(@RequestParam(defaultValue = "10") int limit) {
+        return this.repoPlaylist.findTopByNbAbo(PageRequest.of(0, limit))
+                                .stream()
+                                .map(PlaylistResponse::new)
+                                .toList();
+    }
+
+    @GetMapping("/plus-recents")
+    @Transactional
+    public List<PlaylistResponse> findAllByDates() {
+        return this.repoPlaylist.findAllByCreationDateDesc()
+                                .stream()
+                                .map(PlaylistResponse::new)
+                                .toList();
+    }
+
+    @GetMapping("/plus-recents/top")
+    @Transactional
+    public List<PlaylistResponse> findTopByDates(@RequestParam(defaultValue = "10") int limit) {
+        return this.repoPlaylist.findTopByCreationDate(PageRequest.of(0, limit))
+                                .stream()
+                                .map(PlaylistResponse::new)
                                 .toList();
     }
 
@@ -61,7 +127,7 @@ public class PlaylistApiController {
             throw new PlaylistNotValidException();
         }
 
-        return PlaylistResponse.convert(this.repoPlaylist.save(request.toPlaylist()));
+        return new PlaylistResponse(this.repoPlaylist.save(request.toPlaylist()));
     }
 
     // Update an existing playlist (fetched by its id)
@@ -73,7 +139,7 @@ public class PlaylistApiController {
 
         Playlist playlist = request.toPlaylist();
         playlist.setId(id);
-        return PlaylistResponse.convert(this.repoPlaylist.save(playlist));
+        return new PlaylistResponse(this.repoPlaylist.save(playlist));
     }
 
     // Delete a playlist

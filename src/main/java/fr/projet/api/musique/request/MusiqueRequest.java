@@ -8,23 +8,18 @@ import fr.projet.model.musique.Musique;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter @Setter
 public class MusiqueRequest {
-    @Getter @Setter
     private String titre;
 
-    @Getter @Setter
     private String artiste;
 
-    @Getter @Setter
     private String genre;
 
-    @Getter @Setter
     private int duree;
 
-    @Getter @Setter
     private Link adresse;
 
-    @Getter @Setter
     private Album album;
 
     public Musique toMusique() {

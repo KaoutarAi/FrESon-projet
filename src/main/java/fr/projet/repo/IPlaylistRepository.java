@@ -16,19 +16,21 @@ public interface IPlaylistRepository extends JpaRepository<Playlist, Integer> {
     @Query("SELECT p FROM Playlist p LEFT JOIN FETCH p.musiques m ")
     public List<Playlist> findAllFetchMusiques();
 
+    @Query("SELECT p FROM Playlist p LEFT JOIN FETCH p.musiques m WHERE p.isPublic=true")
+        public List<Playlist> findAllPublicFetchMusiques();
+
     @Query("SELECT p FROM Playlist p LEFT JOIN FETCH p.musiques m WHERE p.id = ?1")
     public Optional<Playlist> findByIdFetchMusiques(int id);
 
     // when user search a playlist by title/user, query a (short) list of candidate playlists
+    @Query("SELECT pl FROM Playlist pl WHERE pl.nom LIKE CONCAT('%', ?1 , '%') AND p.isPublic=true")
     public List<Playlist> findByNomContaining(String partNom, Pageable pageable);
 
-    @Query("SELECT pl FROM Playlist pl WHERE pl.utilisateur.pseudo LIKE CONCAT('%', ?1 , '%')")
+    @Query("SELECT pl FROM Playlist pl WHERE pl.utilisateur.pseudo LIKE CONCAT('%', ?1 , '%') AND p.isPublic=true")
     public List<Playlist> findByUtilisateurContaining(String partUserNom, Pageable pageable);
 
+    @Query("SELECT pl FROM Playlist pl WHERE pl.tag=?1 AND p.isPublic=true")
     public List<Playlist> findByEtiquette(Tag tag, Pageable pageable);
-
-
-    public Optional<Playlist> findByNom(String nom);
 
     public List<Playlist> findByUtilisateur(Utilisateur user, Pageable pageable);
 
@@ -41,10 +43,10 @@ public interface IPlaylistRepository extends JpaRepository<Playlist, Integer> {
     //                     "        ORDER BY nbAbo DESC) AS abonnes\n" + //
     //                     "ON playlist_id = abo_playlist_id;",
     //     nativeQuery = true)
-    @Query("select p from Playlist p order by size(p.abonnes) desc")
+    @Query("select p from Playlist p WHERE p.isPublic=true order by size(p.abonnes) desc")
     public List<Playlist> findAllByOrderNbAbo();
 
-    @Query("select p from Playlist p order by size(p.abonnes) desc")
+    @Query("select p from Playlist p WHERE p.isPublic=true order by size(p.abonnes) desc")
     public List<Playlist> findTopByNbAbo(Pageable pageable);
 
     // @Query(value = "SELECT\n" + //
