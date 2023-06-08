@@ -93,8 +93,8 @@ public class LoggingApiController {
 		
 		BeanUtils.copyProperties(loggingRequest, logging);		
 		
-		logging.setDate(LocalDateTime.now());
-		
+//		logging.setDate(LocalDateTime.now());
+
 		return this.repoLogging.save(logging);
 		
 	}
