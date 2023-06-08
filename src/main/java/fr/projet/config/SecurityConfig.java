@@ -1,5 +1,7 @@
 package fr.projet.config;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
@@ -16,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import fr.projet.config.jwt.JwtHeaderAuthorizationFilter;
 
@@ -32,6 +36,22 @@ public class SecurityConfig {
 //		http.httpBasic(Customizer.withDefaults());
 		
 		http.csrf(c -> c.disable());
+		
+		http.cors(c -> {
+			CorsConfigurationSource source = request -> {
+				CorsConfiguration config = new CorsConfiguration();
+				
+				config.setAllowedOrigins(List.of("*"));
+				
+				config.setAllowedMethods(List.of("*"));
+				
+				config.setAllowedHeaders(List.of("*"));
+				
+				return config;
+			};
+			c.configurationSource(source);
+		});
+		
 		
 		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 		

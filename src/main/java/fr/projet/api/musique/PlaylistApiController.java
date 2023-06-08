@@ -28,6 +28,7 @@ public class PlaylistApiController {
     @Autowired
     private IPlaylistRepository repoPlaylist;
 
+    // Display all playlists
     @GetMapping
     @Transactional
     public List<PlaylistResponse> findAll() {
@@ -37,11 +38,23 @@ public class PlaylistApiController {
                                 .toList();
     }
 
+    // Display the infos of a specific playlist (fetched by its id)
     @GetMapping("/{id}")
     public PlaylistResponse findById(@PathVariable int id) {
         return PlaylistResponse.convert(this.repoPlaylist.findByIdFetchMusiques(id).orElseThrow(PlaylistNotFoundException::new));
     }
 
+    // Display all playlists ordered by number of subscribers
+    @GetMapping("/plus-vues")
+    @Transactional
+    public List<PlaylistResponse> findAllByViews() {
+        return this.repoPlaylist.findAllByOrderNbAbo()
+                                .stream()
+                                .map(PlaylistResponse::convert)
+                                .toList();
+    }
+
+    // Save a new playlist
     @PostMapping
     public PlaylistResponse add(@Valid @RequestBody PlaylistRequest request, BindingResult result) {
         if (result.hasErrors()) {
@@ -51,6 +64,7 @@ public class PlaylistApiController {
         return PlaylistResponse.convert(this.repoPlaylist.save(request.toPlaylist()));
     }
 
+    // Update an existing playlist (fetched by its id)
     @PutMapping("/{id}")
     public PlaylistResponse update(@PathVariable int id, @Valid @RequestBody PlaylistRequest request, BindingResult result) {
         if (result.hasErrors()) {
@@ -62,6 +76,7 @@ public class PlaylistApiController {
         return PlaylistResponse.convert(this.repoPlaylist.save(playlist));
     }
 
+    // Delete a playlist
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable int id) {
         try {

@@ -27,28 +27,32 @@ public class MusiqueApiController {
     @Autowired
     private IMusiqueRepository repoMusic;
 
+    // Display all musics
     @GetMapping
     public List<MusiqueResponse> findAll() {
         return this.repoMusic.findAll()
                              .stream()
-                             .map(MusiqueResponse::convert)
+                             .map(MusiqueResponse::new)
                              .toList();
     }
 
+    // Display a specific music (fetched by its id)
     @GetMapping("/{id}")
     public MusiqueResponse findById(@PathVariable int id) {
-        return MusiqueResponse.convert(this.repoMusic.findById(id).orElseThrow(MusiqueNotFoundException::new));
+        return new MusiqueResponse(this.repoMusic.findById(id).orElseThrow(MusiqueNotFoundException::new));
     }
 
+    // Create a new music TODO: add authorization for Moderator
     @PostMapping
     public MusiqueResponse add(@Valid @RequestBody MusiqueRequest request, BindingResult result) {
         if (result.hasErrors()) {
             throw new MusiqueNotValidException();
         }
 
-        return MusiqueResponse.convert(this.repoMusic.save(request.toMusique()));
+        return new MusiqueResponse(this.repoMusic.save(request.toMusique()));
     }
 
+    // Update an existing music TODO: same as above
     @PutMapping("/{id}")
     public MusiqueResponse update(@PathVariable int id, @Valid @RequestBody MusiqueRequest request, BindingResult result) {
         if (result.hasErrors()) {
@@ -57,9 +61,10 @@ public class MusiqueApiController {
 
         Musique music = request.toMusique();
         music.setId(id);
-        return MusiqueResponse.convert(this.repoMusic.save(music));
+        return new MusiqueResponse(this.repoMusic.save(music));
     }
 
+    // Delete a music TODO: same as above
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable int id) {
         try {
