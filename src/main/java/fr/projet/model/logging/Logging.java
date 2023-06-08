@@ -30,7 +30,7 @@ public class Logging {
 	private String text;
 
 	@Column(name = "log_date", nullable = false)
-	private LocalDateTime date;
+	private LocalDateTime date = LocalDateTime.now();
 
 	public int getId() {
 		return id;

@@ -19,7 +19,9 @@ import fr.projet.api.utilisateur.request.InscriptionRequest;
 import fr.projet.api.utilisateur.response.UtilisateurResponse;
 import fr.projet.exception.utilisateur.InscriptionNotValidException;
 import fr.projet.exception.utilisateur.UtilisateurNotFoundException;
+import fr.projet.model.logging.Logging;
 import fr.projet.model.utilisateur.Utilisateur;
+import fr.projet.repo.ILoggingRepository;
 import fr.projet.repo.IUtilisateurRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -31,6 +33,9 @@ public class UtilisateurApiController {
 	@Autowired
 	private IUtilisateurRepository repoUtilisateur;
 	
+	@Autowired
+	private ILoggingRepository repoLogging;
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
@@ -80,12 +85,17 @@ public class UtilisateurApiController {
             throw new InscriptionNotValidException();
         }
 		Utilisateur utilisateur = new Utilisateur();
+		Logging log = new Logging();
 		
 		BeanUtils.copyProperties(inscriptionRequest, utilisateur);
 		
 		utilisateur.setMdp(this.passwordEncoder.encode(inscriptionRequest.getMdp()));
 		
+		log.setUtilisateur(utilisateur);
+		log.setText("Inscription "+ utilisateur.getPseudo());
+		
 		this.repoUtilisateur.save(utilisateur);
+		this.repoLogging.save(log);
 
 		return UtilisateurResponse.convert(utilisateur);
 	}
