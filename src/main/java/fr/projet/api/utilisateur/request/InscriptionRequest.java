@@ -6,6 +6,9 @@ import jakarta.validation.constraints.Pattern;
 
 public class InscriptionRequest {
 	@NotBlank
+	private String role;
+	
+	@NotBlank
 	private String nom;
 	
 	@NotBlank
@@ -19,11 +22,20 @@ public class InscriptionRequest {
 	private String email;
 	
 	@NotBlank
-	@Pattern(regexp = "[a-zA-Z0-9]{8,}[@#$%^&*()!+=-]")
+//	@Pattern(regexp = "[a-zA-Z0-9]{8,}[@#$%^&*()!+=-]")
+	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\da-zA-Z]).{8,}$")
 	private String mdp;
 	
 	@NotBlank
 	private String mdpVerif;
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
 
 	public String getNom() {
 		return nom;

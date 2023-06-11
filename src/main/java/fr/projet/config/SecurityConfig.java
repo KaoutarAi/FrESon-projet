@@ -29,9 +29,9 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain (HttpSecurity http, JwtHeaderAuthorizationFilter jwtFilter) throws Exception{
 		http.authorizeHttpRequests(authorize -> {
-			authorize.requestMatchers("/accueil", "/api/utilisateur/**").permitAll(); 
+			authorize.requestMatchers("/accueil", "/api/utilisateur/**", "/api/commentaire/**").permitAll(); 
 			
-			authorize.requestMatchers("/**").authenticated();
+//			authorize.requestMatchers("/**").authenticated();
 		});
 //		http.httpBasic(Customizer.withDefaults());
 		
