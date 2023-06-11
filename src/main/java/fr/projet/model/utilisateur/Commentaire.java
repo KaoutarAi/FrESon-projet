@@ -1,6 +1,7 @@
 package fr.projet.model.utilisateur;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import fr.projet.model.musique.Playlist;
 import jakarta.persistence.Column;
@@ -10,7 +11,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
 @Table(name="commentaire")
@@ -23,6 +27,7 @@ public class Commentaire {
 	@Column(name="com_content", length=255, nullable=false)
 	private String contenu;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "com_date", nullable = false)
 	private LocalDateTime date;
 	
@@ -72,6 +77,14 @@ public class Commentaire {
 
 	public void setPlaylist(Playlist playlist) {
 		this.playlist = playlist;
+	}
+	
+	@PrePersist
+	public void setCurrentDate() {
+		LocalDateTime currentDateTime = LocalDateTime.now();
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+	    String dateString = currentDateTime.format(formatter);
+	    this.date = LocalDateTime.parse(dateString, formatter);
 	}
 	
 
