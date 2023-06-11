@@ -76,7 +76,7 @@ public class PlaylistApiController {
     }
 
     @GetMapping("/par-etiquette")
-    public List<PlaylistResponse> findByTagContaining(@RequestParam Tag tag, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int limit) {
+    public List<PlaylistResponse> findByTag(@RequestParam Tag tag, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int limit) {
         return this.repoPlaylist.findByEtiquette(tag, PageRequest.of(page, limit))
                                 .stream()
                                 .map(PlaylistResponse::new)

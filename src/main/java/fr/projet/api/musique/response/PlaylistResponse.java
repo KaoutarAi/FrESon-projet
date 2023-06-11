@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
+import fr.projet.api.utilisateur.response.UtilisateurResponse;
 import fr.projet.enums.Tag;
 import fr.projet.model.musique.Playlist;
+import fr.projet.model.utilisateur.Utilisateur;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +21,10 @@ public class PlaylistResponse {
 
     private List<MusiqueResponse> musiques;
 
+    private int utilisateurId;
+
+    private String utilisateurPseudo;
+
     public PlaylistResponse(Playlist playlist) {
         BeanUtils.copyProperties(playlist, this);
         if (playlist.getMusiques() != null) {
@@ -26,6 +32,10 @@ public class PlaylistResponse {
                                         .stream()
                                         .map(MusiqueResponse::new)
                                         .toList();
+        }
+        if (playlist.getUtilisateur() != null) {
+            this.utilisateurId = playlist.getUtilisateur().getId();
+            this.utilisateurPseudo = playlist.getUtilisateur().getPseudo();
         }
     }
 }
