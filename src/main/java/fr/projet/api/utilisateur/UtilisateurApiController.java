@@ -1,6 +1,7 @@
 package fr.projet.api.utilisateur;
 
-import java.util.List; 
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,9 +86,18 @@ public class UtilisateurApiController {
 		ConnexionResponse response = new ConnexionResponse();
 
 		String token = JwtUtil.generate(authentication);
+		String pseudo = null;
+
+        Optional<String> optPseudo = JwtUtil.getUsername(token);
+        if (optPseudo.isPresent()) {
+			pseudo = optPseudo.get();
+        }
+        Utilisateur utilisateur = this.repoUtilisateur.findByPseudo(pseudo).orElseThrow(UtilisateurNotFoundException::new);
 		
 		response.setSuccess(true);
 		response.setToken(token); 
+		response.setId(utilisateur.getId());
+		response.setRole(utilisateur.getRole());
 		
 		return response;
 	}
