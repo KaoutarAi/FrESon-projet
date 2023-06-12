@@ -4,10 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
-import fr.projet.api.utilisateur.response.UtilisateurResponse;
 import fr.projet.enums.Tag;
 import fr.projet.model.musique.Playlist;
-import fr.projet.model.utilisateur.Utilisateur;
 import lombok.Getter;
 import lombok.Setter;
 
