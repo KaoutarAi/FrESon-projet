@@ -12,12 +12,17 @@ import fr.projet.model.musique.Musique;
 
 public interface IMusiqueRepository extends JpaRepository<Musique, Integer>{
     // when user search a music by title/artist/album, query a (short) list of candidate musics
+    @Query("SELECT msc FROM Musique msc WHERE LOWER(msc.titre) LIKE LOWER(CONCAT('%', ?1, '%'))")
     public List<Musique> findByTitreContaining(String partTitle, Pageable pageable);
 
+    @Query("SELECT msc FROM Musique msc WHERE LOWER(msc.artiste) LIKE LOWER(CONCAT('%', ?1, '%'))")
     public List<Musique> findByArtisteContaining(String partArtiste, Pageable pageable);
 
-    @Query("SELECT msc FROM Musique msc WHERE msc.album.nom LIKE CONCAT('%', ?1, '%')")
+    @Query("SELECT msc FROM Musique msc WHERE LOWER(msc.album.nom) LIKE LOWER(CONCAT('%', ?1, '%'))")
     public List<Musique> findByAlbumContaining(String partAlbum, Pageable pageable);
+
+    @Query("SELECT msc FROM Musique msc WHERE LOWER(msc.album.nom) LIKE LOWER(CONCAT('%', ?1, '%')) OR LOWER(msc.titre) LIKE LOWER(CONCAT('%', ?1, '%')) OR LOWER(msc.artiste) LIKE LOWER(CONCAT('%', ?1, '%'))")
+    public List<Musique> findByFieldContaining(String partString);
 
     // search a music by exact title/artist/album
     public Optional<Musique> findByTitre(String title);
