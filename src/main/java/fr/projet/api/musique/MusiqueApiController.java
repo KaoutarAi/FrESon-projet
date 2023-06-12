@@ -82,6 +82,14 @@ public class MusiqueApiController {
                    .toList();
     }
 
+    @GetMapping("/par")
+    public List<MusiqueResponse> findByFieldContaining(@RequestParam String containing) {
+        return this.repoMusic.findByFieldContaining(containing)
+                             .stream()
+                             .map(MusiqueResponse::new)
+                             .toList();
+    }
+
     @GetMapping("/popularite")
     public List<MusiqueResponse> findAllByNbPlays(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int limit) {
         return this.repoMusic.findAllByOrderByNbPlaysDesc(PageRequest.of(page, limit))
@@ -110,7 +118,7 @@ public class MusiqueApiController {
 
         Musique music = request.toMusique();
         music.setId(id);
-        
+
         Album album = new Album();
         album.setId(request.getAlbum().getId());
         music.setAlbum(album);

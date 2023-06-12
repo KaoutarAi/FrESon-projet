@@ -23,10 +23,10 @@ public interface IPlaylistRepository extends JpaRepository<Playlist, Integer> {
     public Optional<Playlist> findByIdFetchMusiques(int id);
 
     // when user search a playlist by title/user, query a (short) list of candidate playlists
-    @Query("SELECT pl FROM Playlist pl WHERE pl.nom LIKE CONCAT('%', ?1 , '%') AND pl.isPublic=true")
+    @Query("SELECT pl FROM Playlist pl WHERE LOWER(pl.nom) LIKE LOWER(CONCAT('%', ?1 , '%')) AND pl.isPublic=true")
     public List<Playlist> findByNomContaining(String partNom, Pageable pageable);
 
-    @Query("SELECT pl FROM Playlist pl WHERE pl.utilisateur.pseudo LIKE CONCAT('%', ?1 , '%') AND pl.isPublic=true")
+    @Query("SELECT pl FROM Playlist pl WHERE LOWER(pl.utilisateur.pseudo) LIKE LOWER(CONCAT('%', ?1 , '%')) AND pl.isPublic=true")
     public List<Playlist> findByUtilisateurContaining(String partUserNom, Pageable pageable);
 
     @Query("SELECT pl FROM Playlist pl WHERE pl.etiquette = ?1 AND pl.isPublic=true")
