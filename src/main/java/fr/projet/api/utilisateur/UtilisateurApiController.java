@@ -1,9 +1,12 @@
 package fr.projet.api.utilisateur;
 
-import java.util.List;
+import java.util.List; 
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,11 +18,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.projet.api.utilisateur.request.ConnexionRequest;
 import fr.projet.api.utilisateur.request.InscriptionRequest;
+import fr.projet.api.utilisateur.response.ConnexionResponse;
 import fr.projet.api.utilisateur.response.UtilisateurResponse;
+import fr.projet.config.jwt.JwtUtil;
 import fr.projet.exception.utilisateur.InscriptionNotValidException;
 import fr.projet.exception.utilisateur.UtilisateurNotFoundException;
+import fr.projet.model.logging.Logging;
+import fr.projet.model.utilisateur.Createur;
 import fr.projet.model.utilisateur.Utilisateur;
+import fr.projet.repo.ILoggingRepository;
 import fr.projet.repo.IUtilisateurRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -32,7 +41,13 @@ public class UtilisateurApiController {
 	private IUtilisateurRepository repoUtilisateur;
 	
 	@Autowired
+	private ILoggingRepository repoLogging;
+
+	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
 	
 	@GetMapping
 	public List<UtilisateurResponse> findAll() {
@@ -42,20 +57,7 @@ public class UtilisateurApiController {
 			.toList();
 	}
 	
-//	@GetMapping
-//	public List<UtilisateurResponse> findAll() {
-//		List<UtilisateurResponse> response = new ArrayList<>();
-//		List<Utilisateur> utilisateurs = this.repoUtilisateur.findAll();
-//		
-//		for (Utilisateur utilisateur : utilisateurs) {
-//		
-//			response.add(UtilisateurResponse.convert(utilisateur));
-//		}
-//		
-//		return response;
-//	}
-	
-	@GetMapping("/{pseudo}")
+	@GetMapping("/pseudo/{pseudo}")
 	@Transactional
 	public UtilisateurResponse findByPseudo(@PathVariable String pseudo) {
 		Utilisateur utilisateur = this.repoUtilisateur.findByPseudo(pseudo).orElseThrow(UtilisateurNotFoundException::new);
@@ -63,13 +65,33 @@ public class UtilisateurApiController {
 		return UtilisateurResponse.convert(utilisateur);
 	}
 	
-//	@GetMapping("/{id}")
-//	@Transactional
-//	public UtilisateurResponse findById(@PathVariable int id) {
-//		Utilisateur utilisateur = this.repoUtilisateur.findById(id).orElseThrow(UtilisateurNotFoundException::new);
-//		
-//		return UtilisateurResponse.convert(utilisateur);
-//	}
+	@GetMapping("/{id}")
+	@Transactional
+	public UtilisateurResponse findById(@PathVariable int id) {
+		Utilisateur utilisateur = this.repoUtilisateur.findById(id).orElseThrow(UtilisateurNotFoundException::new);
+		
+		return UtilisateurResponse.convert(utilisateur);
+	}
+	
+	
+	@PostMapping("/connexion")
+	public ConnexionResponse connexion(@RequestBody ConnexionRequest connexionRequest) {
+		
+		Authentication authentication =
+				new UsernamePasswordAuthenticationToken(connexionRequest.getPseudo(), connexionRequest.getMdp());
+
+		this.authenticationManager.authenticate(authentication);
+
+		ConnexionResponse response = new ConnexionResponse();
+
+		String token = JwtUtil.generate(authentication);
+		
+		response.setSuccess(true);
+		response.setToken(token); 
+		
+		return response;
+	}
+	
 	
 	@PostMapping("/inscription")
 	public UtilisateurResponse inscription(@Valid @RequestBody InscriptionRequest inscriptionRequest, BindingResult result) {
@@ -79,13 +101,23 @@ public class UtilisateurApiController {
 		if (inscriptionRequest.getMdp().equals(inscriptionRequest.getMdpVerif()) == false) {
             throw new InscriptionNotValidException();
         }
+		
 		Utilisateur utilisateur = new Utilisateur();
+		Logging log = new Logging();
+		
+		if(inscriptionRequest.getRole().equals("CREATEUR")) {
+			utilisateur = new Createur();
+		}
 		
 		BeanUtils.copyProperties(inscriptionRequest, utilisateur);
 		
 		utilisateur.setMdp(this.passwordEncoder.encode(inscriptionRequest.getMdp()));
 		
+		log.setUtilisateur(utilisateur);
+		log.setText("Inscription "+ utilisateur.getPseudo());
+		
 		this.repoUtilisateur.save(utilisateur);
+		this.repoLogging.save(log);
 
 		return UtilisateurResponse.convert(utilisateur);
 	}
@@ -103,12 +135,12 @@ public class UtilisateurApiController {
 		return this.repoUtilisateur.save(utilisateur);
 	}
 	
-//	@DeleteMapping("/{id}")
-//	public void deleteById(@PathVariable int id) {
-//		this.repoUtilisateur.deleteById(id);
-//	}
+	@DeleteMapping("/{id}")
+	public void deleteById(@PathVariable int id) {
+		this.repoUtilisateur.deleteById(id);
+	}
 	
-	@DeleteMapping("/{pseudo}")
+	@DeleteMapping("/pseudo/{pseudo}")
 	public void deleteByPseudo(@PathVariable String pseudo) {
 		this.repoUtilisateur.deleteByPseudo(pseudo);
 	}
