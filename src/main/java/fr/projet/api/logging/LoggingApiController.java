@@ -40,9 +40,10 @@ public class LoggingApiController {
 				.toList();
 	}
 	
-	@GetMapping("/utilisateur/{id}")
-	public List<LoggingResponse> findByUser(@PathVariable int id){
-		return this.repoLogging.findByUtilisateurId(id)
+	
+	@GetMapping("/utilisateur/{pseudo}")
+	public List<LoggingResponse> findByPseudo(@PathVariable String pseudo){
+		return this.repoLogging.findByPseudo(pseudo)
 				.stream()
 				.map(LoggingResponse::convert)
 				.toList();
@@ -56,7 +57,7 @@ public class LoggingApiController {
 				.toList();
 	}
 	
-	@GetMapping("/{year}-{month}-{day}")
+	@GetMapping("/date/{year}/{month}/{day}")
 	public List<LoggingResponse> findByDay(@PathVariable int year,@PathVariable int month,@PathVariable int day ){
 		return this.repoLogging.findByDate(year, month, day)
 				.stream()
@@ -64,7 +65,7 @@ public class LoggingApiController {
 				.toList();
 	}
 	
-	@GetMapping("/{year}/{month}")
+	@GetMapping("/date/{year}/{month}")
 	public List<LoggingResponse> findByMonth(@PathVariable int year,@PathVariable int month){
 		return this.repoLogging.findByMonth(year, month)
 				.stream()
@@ -72,7 +73,7 @@ public class LoggingApiController {
 				.toList();
 	}
 	
-	@GetMapping("/{year}")
+	@GetMapping("/date/{year}")
 	public List<LoggingResponse> findByYear(@PathVariable int year){
 		return this.repoLogging.findByYear(year)
 				.stream()
@@ -92,8 +93,8 @@ public class LoggingApiController {
 		
 		BeanUtils.copyProperties(loggingRequest, logging);		
 		
-		logging.setDate(LocalDateTime.now());
-		
+//		logging.setDate(LocalDateTime.now());
+
 		return this.repoLogging.save(logging);
 		
 	}
@@ -124,9 +125,9 @@ public class LoggingApiController {
 		this.repoLogging.deleteById(id);
 	}
 	
-	@DeleteMapping("/utilisateur/{id}")
-	public void deleteByUtilisateurId(@PathVariable int id) {
-		List<Logging> toDelete = this.repoLogging.findByUtilisateurId(id);
+	@DeleteMapping("/utilisateur/{pseudo}")
+	public void deleteByPseudo(@PathVariable String pseudo) {
+		List<Logging> toDelete = this.repoLogging.findByPseudo(pseudo);
 		if (toDelete.isEmpty()) {
 			throw new LogNotFoundException();
 		}
@@ -135,16 +136,16 @@ public class LoggingApiController {
 		}
 	}
 	
-	@DeleteMapping("/{year}/{month}/{day}")
+	@DeleteMapping("/date/{year}/{month}/{day}")
 	public void deleteByDay(@PathVariable int year, @PathVariable int month, @PathVariable int day){
 		List<Logging> toDelete = this.repoLogging.findByDate(year, month, day);
 		for (Logging l : toDelete) {
 			System.out.println("Suppression du Log "+l.getId());
-			this.repoLogging.delete(l);
+			this.repoLogging.deleteById(l.getId());
 		}
 	}
 	
-	@DeleteMapping("/{year}/{month}")
+	@DeleteMapping("/date/{year}/{month}")
 	public void deleteByMonth(@PathVariable int year, @PathVariable int month){
 		List<Logging> toDelete = this.repoLogging.findByMonth(year, month);
 		for (Logging l : toDelete) {
@@ -153,7 +154,7 @@ public class LoggingApiController {
 		}
 	}
 	
-	@DeleteMapping("/{year}")
+	@DeleteMapping("/date/{year}")
 	public void deleteByDate(@PathVariable int year){
 		List<Logging> toDelete = this.repoLogging.findByYear(year);		
 		for (Logging l : toDelete) {

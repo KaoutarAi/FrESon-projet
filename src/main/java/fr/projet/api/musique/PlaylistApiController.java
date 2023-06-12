@@ -20,7 +20,10 @@ import fr.projet.api.musique.response.PlaylistResponse;
 import fr.projet.enums.Tag;
 import fr.projet.exception.PlaylistNotFoundException;
 import fr.projet.exception.PlaylistNotValidException;
+import fr.projet.model.logging.Logging;
 import fr.projet.model.musique.Playlist;
+import fr.projet.model.utilisateur.Utilisateur;
+import fr.projet.repo.ILoggingRepository;
 import fr.projet.repo.IPlaylistRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -30,6 +33,9 @@ import jakarta.validation.Valid;
 public class PlaylistApiController {
     @Autowired
     private IPlaylistRepository repoPlaylist;
+    
+    @Autowired
+    private ILoggingRepository repoLogging;
 
     // Display all playlists
     @GetMapping
@@ -126,6 +132,11 @@ public class PlaylistApiController {
         if (result.hasErrors()) {
             throw new PlaylistNotValidException();
         }
+        Logging log = new Logging();
+
+        log.setUtilisateur(request.getUtilisateur());
+        log.setText("Création de la playlist : "+ request.getNom());
+        this.repoLogging.save(log);
 
         return new PlaylistResponse(this.repoPlaylist.save(request.toPlaylist()));
     }
@@ -145,7 +156,15 @@ public class PlaylistApiController {
     // Delete a playlist
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable int id) {
+    	Logging log = new Logging();
+    	Utilisateur user = this.repoPlaylist.findById(id).get().getUtilisateur();
+    	String nom = this.repoPlaylist.findById(id).get().getNom();
+    	
+    	log.setUtilisateur(user);
+    	log.setText("Suppression de la playlist : "+ nom);
+    	
         try {
+        	this.repoLogging.save(log);
             this.repoPlaylist.deleteById(id);
         }
 
