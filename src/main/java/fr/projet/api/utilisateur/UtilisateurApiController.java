@@ -1,7 +1,6 @@
 package fr.projet.api.utilisateur;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.projet.api.utilisateur.request.ConnexionRequest;
 import fr.projet.api.utilisateur.request.InscriptionRequest;
+import fr.projet.api.utilisateur.request.ResetMdpRequest;
 import fr.projet.api.utilisateur.response.ConnexionResponse;
 import fr.projet.api.utilisateur.response.UtilisateurResponse;
 import fr.projet.config.jwt.JwtUtil;
+import fr.projet.exception.utilisateur.EntityNotValidException;
 import fr.projet.exception.utilisateur.InscriptionNotValidException;
 import fr.projet.exception.utilisateur.UtilisateurNotFoundException;
 import fr.projet.model.logging.Logging;
@@ -136,9 +137,32 @@ public class UtilisateurApiController {
 		Utilisateur utilisateur = this.repoUtilisateur.findById(id).orElseThrow(UtilisateurNotFoundException::new);
 		
 		BeanUtils.copyProperties(inscriptionRequest, utilisateur);
+		utilisateur.setMdp(this.passwordEncoder.encode(inscriptionRequest.getMdp()));
 		
 		return this.repoUtilisateur.save(utilisateur);
 	}
+	
+	@PutMapping("/reset-mdp/{pseudo}")
+	public Utilisateur edit(@PathVariable String pseudo, @Valid @RequestBody ResetMdpRequest resetMdpRequest, BindingResult result) {
+	    if (result.hasErrors()) {
+	        throw new EntityNotValidException();
+	    }
+	    
+	    if (resetMdpRequest.getMdp().equals(resetMdpRequest.getMdpVerif()) == false) {
+            throw new EntityNotValidException();
+        }
+
+	    Utilisateur utilisateur = this.repoUtilisateur.findByPseudo(pseudo).orElseThrow(UtilisateurNotFoundException::new);
+	    
+	    if (resetMdpRequest.getMdp() != null && !resetMdpRequest.getMdp().isEmpty()) {
+	    	utilisateur.setMdp(this.passwordEncoder.encode(resetMdpRequest.getMdp()));
+	    }
+
+	    BeanUtils.copyProperties(resetMdpRequest, utilisateur, "mdp");
+
+	    return this.repoUtilisateur.save(utilisateur);
+	}
+
 	
 	@DeleteMapping("/{id}")
 	public void deleteById(@PathVariable int id) {
