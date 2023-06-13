@@ -45,17 +45,6 @@ public class CommentaireApiController {
 	@Autowired
 	private IPlaylistRepository repoPlaylist;
 
-    //recupérer le pseudo de l'utilisateur connecté
-    public String getPseudo(@RequestHeader("Authorization") String token) {
-        String jwtToken = token.substring(7);
-        String pseudo = null;
-
-        Optional<String> optPseudo = JwtUtil.getUsername(jwtToken);
-        if (optPseudo.isPresent()) {
-			pseudo = optPseudo.get();
-        }
-        return pseudo;
-    }
     
     @GetMapping
 	public List<CommentaireResponse> findAll() {
@@ -128,7 +117,7 @@ public class CommentaireApiController {
 	public CommentaireResponse commenter(@PathVariable int playlistId, @RequestBody CommentaireRequest commentaireRequest,
 			@RequestHeader("Authorization") String token) {
 		
-		String pseudo = getPseudo(token);
+		String pseudo = UtilisateurConnecte.getPseudo(token);
 		Utilisateur utilisateur = this.repoUtilisateur.findByPseudo(pseudo).orElseThrow(UtilisateurNotFoundException::new);
 		Playlist playlist = this.repoPlaylist.findById(playlistId).orElseThrow(PlaylistNotFoundException::new);
 
