@@ -43,6 +43,8 @@ public class MusiqueResponse {
         }
     }
 
+    public MusiqueResponse() {}
+
     public Musique toMusic() {
         Musique music = new Musique();
         BeanUtils.copyProperties(this, music);

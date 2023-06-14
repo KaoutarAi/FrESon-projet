@@ -21,7 +21,7 @@ public class PlaylistRequest {
 
     private List<MusiqueResponse> musiques;
 
-    private Utilisateur utilisateur;
+    private int utilisateurId;
 
     public Playlist toPlaylist() {
         Playlist playlist = new Playlist();
@@ -31,6 +31,11 @@ public class PlaylistRequest {
                                     .stream()
                                     .map(mr -> mr.toMusic())
                                     .toList());
+        }
+        if (this.utilisateurId != 0) {
+            Utilisateur utilisateur = new Utilisateur();
+            utilisateur.setId(this.utilisateurId);
+            playlist.setUtilisateur(utilisateur);
         }
         return playlist;
     }
