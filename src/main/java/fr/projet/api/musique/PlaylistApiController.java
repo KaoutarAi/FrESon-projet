@@ -33,7 +33,7 @@ import jakarta.validation.Valid;
 public class PlaylistApiController {
     @Autowired
     private IPlaylistRepository repoPlaylist;
-    
+
     @Autowired
     private ILoggingRepository repoLogging;
 
@@ -134,7 +134,9 @@ public class PlaylistApiController {
         }
         Logging log = new Logging();
 
-        log.setUtilisateur(request.getUtilisateur());
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setId(request.getUtilisateurId());
+        log.setUtilisateur(utilisateur);
         log.setText("Création de la playlist : "+ request.getNom());
         this.repoLogging.save(log);
 
@@ -159,10 +161,10 @@ public class PlaylistApiController {
     	Logging log = new Logging();
     	Utilisateur user = this.repoPlaylist.findById(id).get().getUtilisateur();
     	String nom = this.repoPlaylist.findById(id).get().getNom();
-    	
+
     	log.setUtilisateur(user);
     	log.setText("Suppression de la playlist : "+ nom);
-    	
+
         try {
         	this.repoLogging.save(log);
             this.repoPlaylist.deleteById(id);
