@@ -114,6 +114,23 @@ public class UtilisateurApiController {
                 .toList();
 	}
 	
+	@DeleteMapping("/desabo-playlist/{playlistId}")
+	@Transactional
+	public List<PlaylistResponse> dislikePlaylist(@RequestHeader("Authorization") String token, @PathVariable int playlistId){
+		
+		String pseudo = UtilisateurConnecte.getPseudo(token);
+		Utilisateur utilisateur = this.repoUtilisateur.findByPseudo(pseudo).orElseThrow(UtilisateurNotFoundException::new);
+		Playlist playlist = this.repoPlaylist.findById(playlistId).orElseThrow(PlaylistNotFoundException::new);
+		
+		if(utilisateur.getAbonnements().contains(playlist)) {
+			utilisateur.getAbonnements().remove(playlist);
+		}
+		
+		return utilisateur.getAbonnements().stream()
+                .map(PlaylistResponse::new)
+                .toList();
+	}
+	
 	@GetMapping("/favoris/musiques")
 	@Transactional
 	public List<MusiqueResponse> findAboMusique(@RequestHeader("Authorization") String token){
