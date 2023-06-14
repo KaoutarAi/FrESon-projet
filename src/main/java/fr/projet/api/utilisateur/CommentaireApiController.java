@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/commentaire")
+@CrossOrigin("*")
 public class CommentaireApiController {
 	
 	@Autowired
@@ -78,6 +80,26 @@ public class CommentaireApiController {
 	public List<CommentaireResponse> findAllByPlaylistAndUtilisateurAndContenuContaining(@PathVariable int playlistId, @PathVariable String pseudo, @PathVariable String contenu) {
 		
 		return this.repoCommentaire.findAllByPlaylistAndUtilisateurAndContenuContaining(playlistId, pseudo, contenu)
+				.stream()
+				.map(CommentaireResponse::convert)
+				.toList();
+	}
+	
+	@GetMapping("/playlist/{playlistId}/pseudo/{pseudo}")
+	@Transactional
+	public List<CommentaireResponse> findAllByPlaylistAndPseudo(@PathVariable int playlistId, @PathVariable String pseudo) {
+		
+		return this.repoCommentaire.findAllByPlaylistAndPseudo(playlistId, pseudo)
+				.stream()
+				.map(CommentaireResponse::convert)
+				.toList();
+	}
+	
+	@GetMapping("/playlist/{playlistId}/date/{year}-{month}-{day}")
+	@Transactional
+	public List<CommentaireResponse> findAllByPlaylistAndUtilisateurAndDateOnly(@PathVariable int playlistId, @PathVariable int year, @PathVariable int month, @PathVariable int day) {
+		
+		return this.repoCommentaire.findAllByPlaylistAndDateOnly(playlistId, year, month, day)
 				.stream()
 				.map(CommentaireResponse::convert)
 				.toList();
@@ -130,7 +152,7 @@ public class CommentaireApiController {
 		
 		
 		this.repoCommentaire.save(commentaire);
-
+		
 		return CommentaireResponse.convert(commentaire);
 	}
 	
