@@ -17,6 +17,8 @@ public class PlaylistResponse {
 
     private Tag etiquette;
 
+    private boolean isPublic;
+
     private List<MusiqueResponse> musiques;
 
     private int utilisateurId;
