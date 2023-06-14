@@ -91,7 +91,7 @@ public class UtilisateurApiController {
                 .toList();
 	}
 	
-	@GetMapping("favoris/musiques")
+	@GetMapping("/favoris/musiques")
 	@Transactional
 	public List<MusiqueResponse> findAboMusique(@RequestHeader("Authorization") String token){
 		List<MusiqueResponse> response = new ArrayList<>();
@@ -101,6 +101,16 @@ public class UtilisateurApiController {
 		Collections.shuffle(response);
 		
 		return response;
+	}
+	
+	@GetMapping("/mes-playlists")
+	@Transactional
+	public List<PlaylistResponse> mesPlaylists(@RequestHeader("Authorization") String token){
+		String pseudo = UtilisateurConnecte.getPseudo(token);
+		Utilisateur utilisateur = this.repoUtilisateur.findByPseudo(pseudo).orElseThrow(UtilisateurNotFoundException::new);
+		return utilisateur.getPlaylists().stream()
+                .map(PlaylistResponse::new)
+                .toList();
 	}
 	
 	
