@@ -29,13 +29,16 @@ import fr.projet.api.utilisateur.request.ResetMdpRequest;
 import fr.projet.api.utilisateur.response.ConnexionResponse;
 import fr.projet.api.utilisateur.response.UtilisateurResponse;
 import fr.projet.config.jwt.JwtUtil;
+import fr.projet.exception.PlaylistNotFoundException;
 import fr.projet.exception.utilisateur.EntityNotValidException;
 import fr.projet.exception.utilisateur.InscriptionNotValidException;
 import fr.projet.exception.utilisateur.UtilisateurNotFoundException;
 import fr.projet.model.logging.Logging;
+import fr.projet.model.musique.Playlist;
 import fr.projet.model.utilisateur.Createur;
 import fr.projet.model.utilisateur.Utilisateur;
 import fr.projet.repo.ILoggingRepository;
+import fr.projet.repo.IPlaylistRepository;
 import fr.projet.repo.IUtilisateurRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -49,6 +52,9 @@ public class UtilisateurApiController {
 	
 	@Autowired
 	private ILoggingRepository repoLogging;
+	
+	@Autowired
+	private IPlaylistRepository repoPlaylist;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -64,6 +70,14 @@ public class UtilisateurApiController {
 			.toList();
 	}
 	
+	@GetMapping("/roles")
+	public List<UtilisateurResponse> findAllbyRoles() {
+		return this.repoUtilisateur.findAllByRoles("CREATEUR", "UTILISATEUR")
+			.stream()
+			.map(UtilisateurResponse::convert)
+			.toList();
+	}
+	
 	@GetMapping("/pseudo/{pseudo}")
 	@Transactional
 	public UtilisateurResponse findByPseudo(@PathVariable String pseudo) {
@@ -71,6 +85,8 @@ public class UtilisateurApiController {
 		
 		return UtilisateurResponse.convert(utilisateur);
 	}
+	
+	
 	
 	@GetMapping("/{id}")
 	@Transactional
@@ -90,6 +106,27 @@ public class UtilisateurApiController {
                 .map(PlaylistResponse::new)
                 .toList();
 	}
+	
+	@PostMapping("/abo-playlist/{playlistId}")
+	@Transactional
+	public List<PlaylistResponse> likePlaylist(@RequestHeader("Authorization") String token, @PathVariable int playlistId){
+		
+		String pseudo = UtilisateurConnecte.getPseudo(token);
+		Utilisateur utilisateur = this.repoUtilisateur.findByPseudo(pseudo).orElseThrow(UtilisateurNotFoundException::new);
+		Playlist playlist = this.repoPlaylist.findById(playlistId).orElseThrow(PlaylistNotFoundException::new);
+		
+		if(!utilisateur.getAbonnements().contains(playlist)) {
+			utilisateur.getAbonnements().add(playlist);
+		}
+		else {
+			utilisateur.getAbonnements().remove(playlist);
+		}
+		
+		return utilisateur.getAbonnements().stream()
+                .map(PlaylistResponse::new)
+                .toList();
+	}
+	
 	
 	@GetMapping("/favoris/musiques")
 	@Transactional
