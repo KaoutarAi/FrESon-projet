@@ -59,10 +59,10 @@ public interface IPlaylistRepository extends JpaRepository<Playlist, Integer> {
     //                 "    ON l.log_infos LIKE 'creation Playlist - id=' || CAST(p.playlist_id AS VARCHAR(255)) || ' %'\n" + //
     //                 "ORDER BY l.log_date DESC",
     //             nativeQuery = true)
-    @Query("select p from Playlist p, Logging l WHERE  l.text LIKE CONCAT('creation Playlist - id=', CAST(p.id AS string), ' %') ORDER BY l.date DESC")
+    @Query("select p from Playlist p, Logging l WHERE  l.text LIKE CONCAT('%', ' Playlist - id=', CAST(p.id AS string), ' %') ORDER BY l.date DESC")
     public List<Playlist> findAllByCreationDateDesc();
 
-    @Query("select p from Playlist p, Logging l WHERE  l.text LIKE CONCAT('creation Playlist - id=', CAST(p.id AS string), ' %') ORDER BY l.date DESC")
+    @Query("select p from Playlist p, Logging l WHERE  l.text LIKE CONCAT('%', ' Playlist - id=', CAST(p.id AS string), ' %') ORDER BY l.date DESC")
     public List<Playlist> findTopByCreationDate(Pageable pageable);
 
 

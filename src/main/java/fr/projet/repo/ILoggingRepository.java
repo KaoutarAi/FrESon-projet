@@ -16,7 +16,7 @@ public interface ILoggingRepository extends JpaRepository<Logging, Integer>{
 	@Query("SELECT l FROM Logging l WHERE l.text LIKE %?1%")
 	public List<Logging> findByInfo(String info);
 	
-	@Query("SELECT l FROM Logging l  WHERE l.utilisateur.pseudo = ?1 ")
+	@Query("SELECT l FROM Logging l  WHERE l.utilisateur.pseudo LIKE %?1% ")
 	public List<Logging> findByPseudo(String pseudo);
 	
 	@Query("SELECT l FROM Logging l WHERE EXTRACT (year FROM l.date) = ?1 AND EXTRACT (month FROM l.date) = ?2")
