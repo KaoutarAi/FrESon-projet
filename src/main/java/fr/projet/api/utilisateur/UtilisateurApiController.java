@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +27,7 @@ import fr.projet.api.musique.response.PlaylistResponse;
 import fr.projet.api.utilisateur.request.ConnexionRequest;
 import fr.projet.api.utilisateur.request.InscriptionRequest;
 import fr.projet.api.utilisateur.request.ResetMdpRequest;
+import fr.projet.api.utilisateur.request.UtilisateurRequest;
 import fr.projet.api.utilisateur.response.ConnexionResponse;
 import fr.projet.api.utilisateur.response.UtilisateurResponse;
 import fr.projet.config.jwt.JwtUtil;
@@ -72,7 +74,7 @@ public class UtilisateurApiController {
 
 	@GetMapping("/roles")
 	public List<UtilisateurResponse> findAllbyRoles() {
-		return this.repoUtilisateur.findAllByRoles("CREATEUR", "UTILISATEUR")
+		return this.repoUtilisateur.findAllByRoles()
 			.stream()
 			.map(UtilisateurResponse::convert)
 			.toList();
@@ -205,22 +207,42 @@ public class UtilisateurApiController {
 		return UtilisateurResponse.convert(utilisateur);
 	}
 
-	@PutMapping("/{id}")
-	public Utilisateur edit(@PathVariable int id, @Valid @RequestBody InscriptionRequest inscriptionRequest, BindingResult result) {
+	
+	@PutMapping("/params")
+	public ResponseEntity<Utilisateur> edit(@RequestHeader("Authorization") String token, @Valid @RequestBody UtilisateurRequest userRequest, BindingResult result) {
+
 		if (result.hasErrors()) {
-			throw new InscriptionNotValidException();
+			throw new EntityNotValidException();
 		}
-
-		Utilisateur utilisateur = this.repoUtilisateur.findById(id).orElseThrow(UtilisateurNotFoundException::new);
-
-		BeanUtils.copyProperties(inscriptionRequest, utilisateur);
-		utilisateur.setMdp(this.passwordEncoder.encode(inscriptionRequest.getMdp()));
-
-		return this.repoUtilisateur.save(utilisateur);
+		
+		String pseudo = UtilisateurConnecte.getPseudo(token);
+		Utilisateur utilisateur = this.repoUtilisateur.findByPseudo(pseudo).orElseThrow(UtilisateurNotFoundException::new);
+		
+		if(userRequest.getNom() != null) {
+			utilisateur.setNom(userRequest.getNom());
+		}
+		
+		if(userRequest.getPrenom() != null) {
+			utilisateur.setPrenom(userRequest.getPrenom());
+		}
+		
+		if(userRequest.getEmail() != null) {
+			utilisateur.setEmail(userRequest.getEmail());
+		}
+		
+		if(userRequest.getMdp() != null) {
+			if (userRequest.getMdp().equals(userRequest.getMdpVerif()) == false) {
+	            throw new EntityNotValidException();
+	        }
+			utilisateur.setMdp(this.passwordEncoder.encode(userRequest.getMdp()));
+		}
+		
+		Utilisateur savedUtilisateur = this.repoUtilisateur.save(utilisateur);
+	    return ResponseEntity.ok(savedUtilisateur);
 	}
 
 	@PutMapping("/reset-mdp/{pseudo}")
-	public Utilisateur edit(@PathVariable String pseudo, @Valid @RequestBody ResetMdpRequest resetMdpRequest, BindingResult result) {
+	public ResponseEntity<Utilisateur> edit(@PathVariable String pseudo, @Valid @RequestBody ResetMdpRequest resetMdpRequest, BindingResult result) {
 	    if (result.hasErrors()) {
 	        throw new EntityNotValidException();
 	    }
@@ -237,7 +259,8 @@ public class UtilisateurApiController {
 
 	    BeanUtils.copyProperties(resetMdpRequest, utilisateur, "mdp");
 
-	    return this.repoUtilisateur.save(utilisateur);
+	    Utilisateur savedUtilisateur = this.repoUtilisateur.save(utilisateur);
+	    return ResponseEntity.ok(savedUtilisateur);
 	}
 
 
