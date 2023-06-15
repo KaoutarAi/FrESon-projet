@@ -46,22 +46,22 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/utilisateur")
 public class UtilisateurApiController {
-	
+
 	@Autowired
 	private IUtilisateurRepository repoUtilisateur;
-	
+
 	@Autowired
 	private ILoggingRepository repoLogging;
-	
+
 	@Autowired
 	private IPlaylistRepository repoPlaylist;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
+
 	@GetMapping
 	public List<UtilisateurResponse> findAll() {
 		return this.repoUtilisateur.findAll()
@@ -69,7 +69,7 @@ public class UtilisateurApiController {
 			.map(UtilisateurResponse::convert)
 			.toList();
 	}
-	
+
 	@GetMapping("/roles")
 	public List<UtilisateurResponse> findAllbyRoles() {
 		return this.repoUtilisateur.findAllByRoles("CREATEUR", "UTILISATEUR")
@@ -77,57 +77,59 @@ public class UtilisateurApiController {
 			.map(UtilisateurResponse::convert)
 			.toList();
 	}
-	
+
 	@GetMapping("/pseudo/{pseudo}")
 	@Transactional
 	public UtilisateurResponse findByPseudo(@PathVariable String pseudo) {
 		Utilisateur utilisateur = this.repoUtilisateur.findByPseudo(pseudo).orElseThrow(UtilisateurNotFoundException::new);
-		
+
 		return UtilisateurResponse.convert(utilisateur);
 	}
-	
-	
-	
+
+
+
 	@GetMapping("/{id}")
 	@Transactional
 	public UtilisateurResponse findById(@PathVariable int id) {
 		Utilisateur utilisateur = this.repoUtilisateur.findById(id).orElseThrow(UtilisateurNotFoundException::new);
-		
+
 		return UtilisateurResponse.convert(utilisateur);
 	}
-	
+
 	@GetMapping("/favoris/playlists")
 	@Transactional
 	public List<PlaylistResponse> findAboPlaylist(@RequestHeader("Authorization") String token) {
-		
+
 		String pseudo = UtilisateurConnecte.getPseudo(token);
 		Utilisateur utilisateur = this.repoUtilisateur.findByPseudo(pseudo).orElseThrow(UtilisateurNotFoundException::new);
 		return utilisateur.getAbonnements().stream()
                 .map(PlaylistResponse::new)
                 .toList();
 	}
-	
-	@PostMapping("/abo-playlist/{playlistId}")
+
+	@PutMapping("/abo-playlist/{playlistId}")
 	@Transactional
 	public List<PlaylistResponse> likePlaylist(@RequestHeader("Authorization") String token, @PathVariable int playlistId){
-		
+
 		String pseudo = UtilisateurConnecte.getPseudo(token);
 		Utilisateur utilisateur = this.repoUtilisateur.findByPseudo(pseudo).orElseThrow(UtilisateurNotFoundException::new);
 		Playlist playlist = this.repoPlaylist.findById(playlistId).orElseThrow(PlaylistNotFoundException::new);
-		
+
 		if(!utilisateur.getAbonnements().contains(playlist)) {
 			utilisateur.getAbonnements().add(playlist);
 		}
 		else {
 			utilisateur.getAbonnements().remove(playlist);
 		}
-		
+
+        this.repoUtilisateur.save(utilisateur);
+
 		return utilisateur.getAbonnements().stream()
                 .map(PlaylistResponse::new)
                 .toList();
 	}
-	
-	
+
+
 	@GetMapping("/favoris/musiques")
 	@Transactional
 	public List<MusiqueResponse> findAboMusique(@RequestHeader("Authorization") String token){
@@ -136,10 +138,10 @@ public class UtilisateurApiController {
 			response.addAll(pl.getMusiques());
 		}
 		Collections.shuffle(response);
-		
+
 		return response;
 	}
-	
+
 	@GetMapping("/mes-playlists")
 	@Transactional
 	public List<PlaylistResponse> mesPlaylists(@RequestHeader("Authorization") String token){
@@ -149,11 +151,11 @@ public class UtilisateurApiController {
                 .map(PlaylistResponse::new)
                 .toList();
 	}
-	
-	
+
+
 	@PostMapping("/connexion")
 	public ConnexionResponse connexion(@RequestBody ConnexionRequest connexionRequest) {
-		
+
 		Authentication authentication =
 				new UsernamePasswordAuthenticationToken(connexionRequest.getPseudo(), connexionRequest.getMdp());
 
@@ -164,16 +166,16 @@ public class UtilisateurApiController {
 		String token = JwtUtil.generate(authentication);
 
         Utilisateur utilisateur = this.repoUtilisateur.findByPseudo(connexionRequest.getPseudo()).orElseThrow(UtilisateurNotFoundException::new);
-		
+
 		response.setSuccess(true);
-		response.setToken(token); 
+		response.setToken(token);
 		response.setId(utilisateur.getId());
 		response.setRole(utilisateur.getRole());
-		
+
 		return response;
 	}
-	
-	
+
+
 	@PostMapping("/inscription")
 	public UtilisateurResponse inscription(@Valid @RequestBody InscriptionRequest inscriptionRequest, BindingResult result) {
 		if (result.hasErrors()) {
@@ -182,53 +184,53 @@ public class UtilisateurApiController {
 		if (inscriptionRequest.getMdp().equals(inscriptionRequest.getMdpVerif()) == false) {
             throw new InscriptionNotValidException();
         }
-		
+
 		Utilisateur utilisateur = new Utilisateur();
 		Logging log = new Logging();
-		
+
 		if(inscriptionRequest.getRole().equals("CREATEUR")) {
 			utilisateur = new Createur();
 		}
-		
+
 		BeanUtils.copyProperties(inscriptionRequest, utilisateur);
-		
+
 		utilisateur.setMdp(this.passwordEncoder.encode(inscriptionRequest.getMdp()));
-		
+
 		log.setUtilisateur(utilisateur);
 		log.setText("Inscription "+ utilisateur.getPseudo());
-		
+
 		this.repoUtilisateur.save(utilisateur);
 		this.repoLogging.save(log);
 
 		return UtilisateurResponse.convert(utilisateur);
 	}
-	
+
 	@PutMapping("/{id}")
 	public Utilisateur edit(@PathVariable int id, @Valid @RequestBody InscriptionRequest inscriptionRequest, BindingResult result) {
 		if (result.hasErrors()) {
 			throw new InscriptionNotValidException();
 		}
-		
+
 		Utilisateur utilisateur = this.repoUtilisateur.findById(id).orElseThrow(UtilisateurNotFoundException::new);
-		
+
 		BeanUtils.copyProperties(inscriptionRequest, utilisateur);
 		utilisateur.setMdp(this.passwordEncoder.encode(inscriptionRequest.getMdp()));
-		
+
 		return this.repoUtilisateur.save(utilisateur);
 	}
-	
+
 	@PutMapping("/reset-mdp/{pseudo}")
 	public Utilisateur edit(@PathVariable String pseudo, @Valid @RequestBody ResetMdpRequest resetMdpRequest, BindingResult result) {
 	    if (result.hasErrors()) {
 	        throw new EntityNotValidException();
 	    }
-	    
+
 	    if (resetMdpRequest.getMdp().equals(resetMdpRequest.getMdpVerif()) == false) {
             throw new EntityNotValidException();
         }
 
 	    Utilisateur utilisateur = this.repoUtilisateur.findByPseudo(pseudo).orElseThrow(UtilisateurNotFoundException::new);
-	    
+
 	    if (resetMdpRequest.getMdp() != null && !resetMdpRequest.getMdp().isEmpty()) {
 	    	utilisateur.setMdp(this.passwordEncoder.encode(resetMdpRequest.getMdp()));
 	    }
@@ -238,12 +240,12 @@ public class UtilisateurApiController {
 	    return this.repoUtilisateur.save(utilisateur);
 	}
 
-	
+
 	@DeleteMapping("/{id}")
 	public void deleteById(@PathVariable int id) {
 		this.repoUtilisateur.deleteById(id);
 	}
-	
+
 	@DeleteMapping("/pseudo/{pseudo}")
 	public void deleteByPseudo(@PathVariable String pseudo) {
 		this.repoUtilisateur.deleteByPseudo(pseudo);
