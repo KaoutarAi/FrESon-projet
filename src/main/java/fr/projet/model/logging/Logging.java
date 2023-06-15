@@ -3,9 +3,6 @@ package fr.projet.model.logging;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import fr.projet.model.utilisateur.Utilisateur;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
