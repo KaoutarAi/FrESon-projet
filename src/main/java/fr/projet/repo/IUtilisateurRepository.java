@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.projet.model.utilisateur.Utilisateur;
@@ -18,4 +19,8 @@ public interface IUtilisateurRepository extends JpaRepository<Utilisateur, Integ
 	public void deleteById(Integer id);
 	@Transactional
 	public void deleteByPseudo(String pseudo);
+	
+	@Query("select u from Utilisateur u where u.role = ?1 or u.role = ?2")
+	public List<Utilisateur> findAllByRoles(String role1, String role2);
+	
 }

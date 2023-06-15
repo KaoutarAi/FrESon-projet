@@ -8,6 +8,7 @@ public class UtilisateurResponse {
 	private int id;
 	private String pseudo;
 	private String email;
+	private String role;
 
 
 	public int getId() {
@@ -35,8 +36,13 @@ public class UtilisateurResponse {
 	}
 
 
+	public String getRole() {
+		return role;
+	}
 
-
+	public void setRole(String role) {
+		this.role = role;
+	}
 
 	public static UtilisateurResponse convert(Utilisateur utilisateur) {
 		UtilisateurResponse response = new UtilisateurResponse();
