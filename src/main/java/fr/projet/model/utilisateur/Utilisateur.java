@@ -7,6 +7,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import fr.projet.model.logging.Logging;
 import fr.projet.model.musique.Playlist;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorValue;
@@ -51,8 +52,7 @@ public class Utilisateur {
 	@Column(name = "user_role", insertable = false, updatable = false)
 	private String role;
 
-	@OneToMany(mappedBy = "utilisateur")
-	@OnDelete(action = OnDeleteAction.CASCADE)
+	@OneToMany(mappedBy = "utilisateur", cascade = CascadeType.REMOVE)
 	private List<Logging> loggings;
 
 	@OneToMany(mappedBy = "utilisateur")

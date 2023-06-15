@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import fr.projet.model.utilisateur.Utilisateur;
 
 public interface IUtilisateurRepository extends JpaRepository<Utilisateur, Integer> {
-	
+
 	public Optional<Utilisateur> findByPseudo(String pseudo);
 	public Optional<Utilisateur> findByPseudoAndRole(String pseudo, String role);
 	public List<Utilisateur> findAll();
@@ -19,8 +19,8 @@ public interface IUtilisateurRepository extends JpaRepository<Utilisateur, Integ
 	public void deleteById(Integer id);
 	@Transactional
 	public void deleteByPseudo(String pseudo);
-	
+
 	@Query("select u from Utilisateur u where u.role = ?1 or u.role = ?2")
 	public List<Utilisateur> findAllByRoles(String role1, String role2);
-	
+
 }
