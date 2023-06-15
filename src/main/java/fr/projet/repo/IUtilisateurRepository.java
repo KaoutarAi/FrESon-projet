@@ -20,7 +20,7 @@ public interface IUtilisateurRepository extends JpaRepository<Utilisateur, Integ
 	@Transactional
 	public void deleteByPseudo(String pseudo);
 
-	@Query("select u from Utilisateur u where u.role = ?1 or u.role = ?2")
-	public List<Utilisateur> findAllByRoles(String role1, String role2);
+	@Query("select u from Utilisateur u where u.role = 'CREATEUR' or u.role = 'UTILISATEUR'")
+	public List<Utilisateur> findAllByRoles();
 
 }
