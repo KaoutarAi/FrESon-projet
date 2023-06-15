@@ -137,10 +137,13 @@ public class PlaylistApiController {
         Utilisateur utilisateur = new Utilisateur();
         utilisateur.setId(request.getUtilisateurId());
         log.setUtilisateur(utilisateur);
-        log.setText("Création de la playlist : "+ request.getNom());
+
+        PlaylistResponse playlist = new PlaylistResponse(this.repoPlaylist.save(request.toPlaylist()));
+
+        log.setText("Création de la Playlist - id=" + playlist.getId() + " : "+ request.getNom());
         this.repoLogging.save(log);
 
-        return new PlaylistResponse(this.repoPlaylist.save(request.toPlaylist()));
+        return playlist;
     }
 
     // Update an existing playlist (fetched by its id)
