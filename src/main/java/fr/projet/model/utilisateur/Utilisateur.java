@@ -55,8 +55,8 @@ public class Utilisateur {
 	@OneToMany(mappedBy = "utilisateur", cascade = CascadeType.REMOVE)
 	private List<Logging> loggings;
 
-	@OneToMany(mappedBy = "utilisateur")
-	@OnDelete(action = OnDeleteAction.CASCADE)
+	@OneToMany(mappedBy = "utilisateur", cascade = CascadeType.REMOVE)
+//	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Commentaire> commentaires;
 
 	@ManyToMany
